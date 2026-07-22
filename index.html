@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist de Mudança Programada · Engenharia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #e6e9ef;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+        }
+
+        .report-container {
+            max-width: 1100px;
+            width: 100%;
+            background: white;
+            padding: 2.5rem 2.2rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* CABEÇALHO COM LOGO CENTRALIZADA */
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f2f6;
+        }
+
+        .header .logo-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header .logo-area img {
+            height: 70px;
+            width: auto;
+            max-width: 200px;
+            object-fit: contain;
+        }
+
+        .header .title-doc {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0b1e3a;
+            letter-spacing: -0.5px;
+        }
+
+        .header .subtitle {
+            color: #4a5b7a;
+            font-weight: 400;
+            font-size: 0.95rem;
+            margin-top: -0.3rem;
+        }
+
+        .section {
+            margin: 2rem 0 1.8rem 0;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0b1e3a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1.2rem;
+            border-left: 5px solid #2a6df4;
+            padding-left: 0.8rem;
+        }
+
+        .section-title i {
+            color: #2a6df4;
+            font-size: 1.1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a2d4a;
+            margin: 1rem 0 0.8rem 0;
+            padding-left: 0.5rem;
+            border-left: 3px solid #6a8fc9;
+        }
+
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem 2rem;
+        }
+
+        .grid-3col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem 1.5rem;
+        }
+
+        .field-group {
+            margin-bottom: 0.6rem;
+        }
+
+        .field-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: #3d4f6f;
+            margin-bottom: 2px;
+        }
+
+        .field-group .value {
+            font-weight: 500;
+            color: #0b1e3a;
+            background: #f8faff;
+            padding: 0.4rem 0.8rem;
+            border-radius: 10px;
+            border: 1px solid #dfe5ef;
+            min-height: 2.5rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .field-group input[type="text"],
+        .field-group input[type="datetime-local"],
+        .field-group input[type="url"],
+        .field-group textarea {
+            width: 100%;
+            padding: 0.5rem 0.8rem;
+            border: 1px solid #dfe5ef;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background: #f8faff;
+            transition: 0.2s;
+        }
+
+        .field-group input[type="text"]:focus,
+        .field-group input[type="datetime-local"]:focus,
+        .field-group input[type="url"]:focus,
+        .field-group textarea:focus {
+            outline: none;
+            border-color: #2a6df4;
+            box-shadow: 0 0 0 3px rgba(42, 109, 244, 0.1);
+        }
+
+        .field-group textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+
+        .field-group .value-check {
+            background: #f8faff;
+            padding: 0.4rem 0.8rem;
+            border-radius: 10px;
+            border: 1px solid #dfe5ef;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px 20px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .check-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #2a6df4;
+        }
+
+        .check-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #2a6df4;
+        }
+
+        .check-item i {
+            font-size: 1.1rem;
+        }
+
+        .table-mini {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .table-mini th {
+            text-align: left;
+            background: #f0f4fe;
+            padding: 0.5rem 0.5rem;
+            font-weight: 600;
+            color: #1a2d4a;
+            border-bottom: 2px solid #d0d9e8;
+        }
+
+        .table-mini td {
+            padding: 0.3rem 0.5rem;
+            border-bottom: 1px solid #e8ecf3;
+        }
+
+        .table-mini tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-mini input[type="text"] {
+            width: 100%;
+            padding: 0.3rem 0.4rem;
+            border: 1px solid #d0d9e8;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            background: #fafcff;
+        }
+
+        .table-mini input[type="text"]:focus {
+            outline: none;
+            border-color: #2a6df4;
+        }
+
+        .btn-add-row {
+            background: #e8edf8;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #1a2d4a;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .btn-add-row:hover {
+            background: #d0dcef;
+        }
+
+        .btn-remove-row {
+            background: #fee8e8;
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            color: #b33;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .btn-remove-row:hover {
+            background: #fdd;
+        }
+
+        .step-block {
+            background: #f9fbfe;
+            border-radius: 16px;
+            padding: 0.8rem 1.2rem;
+            margin-bottom: 0.6rem;
+            border-left: 4px solid #2a6df4;
+        }
+
+        .step-block .step-title {
+            font-weight: 600;
+            color: #0b1e3a;
+        }
+
+        .step-block input[type="text"] {
+            width: 100%;
+            padding: 0.3rem 0.6rem;
+            border: 1px solid #d0d9e8;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background: #fafcff;
+            margin-top: 0.2rem;
+        }
+
+        .step-block .step-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .step-block .step-grid label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #3d4f6f;
+            text-transform: uppercase;
+        }
+
+        .monitoring-badge {
+            background: #e1e9f7;
+            border-radius: 40px;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .approval-line {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px dashed #bcc9df;
+        }
+
+        .approval-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .approval-item .label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #5a6f8e;
+            font-weight: 600;
+        }
+
+        .approval-item .line {
+            width: 100%;
+            border-bottom: 2px solid #1f2f4a;
+            margin-top: 4px;
+        }
+
+        .approval-item input[type="text"] {
+            border: none;
+            border-bottom: 2px solid #1f2f4a;
+            padding: 0.2rem 0;
+            font-size: 0.9rem;
+            background: transparent;
+            width: 100%;
+        }
+
+        .approval-item input[type="text"]:focus {
+            outline: none;
+            border-bottom-color: #2a6df4;
+        }
+
+        .file-upload-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .file-upload-group input[type="file"] {
+            padding: 0.3rem;
+            border: 1px dashed #bcc9df;
+            border-radius: 8px;
+            background: #f8faff;
+            font-size: 0.85rem;
+            max-width: 280px;
+        }
+
+        .file-upload-group .file-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .file-upload-group .file-preview img {
+            max-height: 60px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        .file-upload-group .file-preview .file-name {
+            font-size: 0.75rem;
+            color: #3d4f6f;
+            background: #eef2f9;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+        }
+
+        .conditional-field {
+            display: none;
+        }
+
+        .conditional-field.visible {
+            display: block;
+        }
+
+        @media (max-width: 700px) {
+            .report-container {
+                padding: 1.5rem 1rem;
+            }
+            .grid-2col,
+            .grid-3col {
+                grid-template-columns: 1fr;
+            }
+            .step-block .step-grid {
+                grid-template-columns: 1fr;
+            }
+            .approval-line {
+                flex-direction: column;
+            }
+            .header .logo-area img {
+                height: 50px;
+            }
+        }
+
+        .print-button {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-print {
+            background: #1f2f4a;
+            color: white;
+            border: none;
+            padding: 0.7rem 2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-print:hover {
+            background: #2a3f60;
+            transform: scale(1.02);
+        }
+
+        .btn-generate {
+            background: #2a6df4;
+            color: white;
+            border: none;
+            padding: 0.7rem 2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-generate:hover {
+            background: #1a5ad4;
+            transform: scale(1.02);
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #dde3ed;
+            margin: 1.8rem 0;
+        }
+
+        .text-muted {
+            color: #5f7395;
+            font-size: 0.8rem;
+        }
+
+        .inline-code {
+            background: #eef2f9;
+            padding: 0.1rem 0.5rem;
+            border-radius: 30px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.8rem;
+            color: #1c3a6b;
+        }
+    </style>
+</head>
+<body>
+    <div class="report-container" id="report">
+        <!-- CABEÇALHO COM LOGO CENTRALIZADA -->
+        <div class="header">
+            <div class="logo-area">
+                <img src="https://i.imgur.com/dvzRyus.png" alt="Logomarca da empresa" />
+                <span class="title-doc">Mudança Programada</span>
+                <span class="subtitle"><i class="fas fa-clipboard-list"></i> Checklist · Engenharia de Rede</span>
+            </div>
+        </div>
+
+        <!-- 1. IDENTIFICAÇÃO -->
+        <div class="section">
+            <div class="section-title"><i class="fas fa-tag"></i> 1. Identificação da Mudança</div>
+            <div class="grid-2col">
+                <div class="field-group">
+                    <label>Número da Mudança</label>
+                    <input type="text" id="numeroMudanca" readonly style="background:#eef2f9; font-weight:600;">
+                </div>
+                <div class="field-group">
+                    <label>Data da execução</label>
+                    <input type="text" id="dataExecucao" readonly style="background:#eef2f9;">
+                </div>
+                <div class="field-group">
+                    <label>Horário previsto</label>
+                    <input type="text" id="horarioPrevisto" placeholder="Ex: 23:00 - 02:00 (UTC-3)">
+                </div>
+                <div class="field-group">
+                    <label>Horário de início</label>
+                    <input type="text" id="horarioInicio" readonly style="background:#eef2f9;">
+                </div>
+                <div class="field-group">
+                    <label>Horário de término</label>
+                    <input type="text" id="horarioTermino" readonly style="background:#eef2f9;">
+                </div>
+                <div class="field-group">
+                    <label>Responsável pela execução</label>
+                    <input type="text" id="responsavelExecucao" placeholder="Nome do responsável">
+                </div>
+                <div class="field-group">
+                    <label>Responsável pela aprovação</label>
+                    <input type="text" id="responsavelAprovacao" placeholder="Nome do aprovador">
+                </div>
+                <div class="field-group">
+                    <label>Equipe envolvida</label>
+                    <input type="text" id="equipeEnvolvida" placeholder="Ex: NOC · Backbone">
+                </div>
+                <div class="field-group">
+                    <label>Janela de manutenção</label>
+                    <input type="text" id="janelaManutencao" placeholder="Ex: 22/07 23:00 – 23/07 03:00">
+                </div>
+            </div>
+            <div class="field-group" style="margin-top: 0.5rem;">
+                <label>Tipo de atividade</label>
+                <div class="value-check" id="tipoAtividade">
+                    <label class="check-item"><input type="checkbox" value="Firmware"> Firmware</label>
+                    <label class="check-item"><input type="checkbox" value="Configuração"> Configuração</label>
+                    <label class="check-item"><input type="checkbox" value="Migração"> Migração</label>
+                    <label class="check-item"><input type="checkbox" value="Troca de equipamento"> Troca de equipamento</label>
+                    <label class="check-item"><input type="checkbox" value="Alteração de BGP"> Alteração de BGP</label>
+                    <label class="check-item"><input type="checkbox" value="Alteração de OSPF"> Alteração de OSPF</label>
+                    <label class="check-item"><input type="checkbox" value="Alteração de VLAN"> Alteração de VLAN</label>
+                    <label class="check-item"><input type="checkbox" value="MPLS"> MPLS</label>
+                    <label class="check-item"><input type="checkbox" value="Backbone"> Backbone</label>
+                    <label class="check-item"><input type="checkbox" value="Outro"> Outro</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. OBJETIVO -->
+        <div class="section">
+            <div class="section-title"><i class="fas fa-bullseye"></i> 2. Objetivo da Mudança</div>
+            <div class="field-group">
+                <textarea id="objetivoMudanca" rows="3" placeholder="Descrever exatamente o que será realizado. Exemplo: Atualização do firmware dos switches Datacom DM4370 dos POPs de Cruzeiro do Sul visando correção do bug XXXX."></textarea>
+            </div>
+        </div>
+
+        <!-- 3. EQUIPAMENTOS -->
+        <div class="section">
+            <div class="section-title"><i class="fas fa-server"></i> 3. Equipamentos Envolvidos</div>
+            <table class="table-mini" id="tabelaEquipamentos">
+                <thead>
+                    <tr>
+                        <th>Hostname</th>
+                        <th>Modelo</th>
+                        <th>Serial</th>
+                        <th>Local</th>
+                        <th>IP de gerência</th>
+                        <th>Versão atual</th>
+                        <th>Versão destino</th>
+                        <th style="width:40px;"></th>
+                    </tr>
+                </thead>
+                <tbody id="equipamentosBody">
+                    <tr>
+                        <td><input type="text" placeholder="SW-ACR-RBO-01"></td>
+                        <td><input type="text" placeholder="DM4370"></td>
+                        <td><input type="text" placeholder="BR-4382A"></td>
+                        <td><input type="text" placeholder="Rio Branco"></td>
+                        <td><input type="text" placeholder="10.10.10.1"></td>
+                        <td><input type="text" placeholder="10.5.0"></td>
+                        <td><input type="text" placeholder="10.6.0"></td>
+                        <td><button class="btn-remove-row" onclick="removerLinhaEquipamento(this)">✕</button></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" placeholder="SW-ACR-CZS-02"></td>
+                        <td><input type="text" placeholder="DM4370"></td>
+                        <td><input type="text" placeholder="BR-4390B"></td>
+                        <td><input type="text" placeholder="Cruzeiro do Sul"></td>
+                        <td><input type="text" placeholder="10.10.10.22"></td>
+                        <td><input type="text" placeholder="10.5.2"></td>
+                        <td><input type="text" placeholder="10.6.0"></td>
+                        <td><button class="btn-remove-row" onclick="removerLinhaEquipamento(this)">✕</button></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" placeholder="SW-ACR-PVH-03"></td>
+                        <td><input type="text" placeholder="DM4370"></td>
+                        <td><input type="text" placeholder="BR-4411C"></td>
+                        <td><input type="text" placeholder="Porto Velho"></td>
+                        <td><input type="text" placeholder="10.10.10.45"></td>
+                        <td><input type="text" placeholder="10.5.1"></td>
+                        <td><input type="text" placeholder="10.6.0"></td>
+                        <td><button class="btn-remove-row" onclick="removerLinhaEquipamento(this)">✕</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn-add-row" onclick="adicionarLinhaEquipamento()"><i class="fas fa-plus"></i> Adicionar equipamento</button>
+        </div>
+
+        <!-- 4. ANÁLISE DE IMPACTO -->
+        <div class="section">
+            <div class="section-title"><i class="fas fa-exclamation-triangle"></i> 4. Análise de Impacto</div>
+            <div class="grid-2col">
+                <div class="field-group">
+                    <label>Clientes afetados</label>
+                    <input type="text" id="clientesAfetados" placeholder="Ex: ~120 (residencial + dedicado)">
+                </div>
+                <div class="field-group">
+                    <label>Circuitos afetados</label>
+                    <input type="text" id="circuitosAfetados" placeholder="Ex: 4 uplinks · 2 rings">
+                </div>
+                <div class="field-group">
+                    <label>Serviços afetados</label>
+                    <input type="text" id="servicosAfetados" placeholder="Ex: Backbone · Telefonia · PPPoE">
+                </div>
+                <div class="field-group">
+                    <label>Tempo estimado de indisponibilidade</label>
+                    <input type="text" id="tempoIndisponibilidade" placeholder="Ex: 15 min por switch">
+                </div>
+            </div>
+            <div class="field-group" style="margin-top: 0.5rem;">
+                <label>Existe redundância?</label>
+                <div class="value-check">
+                    <label class="check-item"><input type="radio" name="redundancia" value="Sim"> Sim</label>
+                    <label class="check-item"><input type="radio" name="redundancia" value="Não"> Não</label>
+                </div>
+            </div>
+            <div class="field-group">
+                <label>Caso haja falha, qual o impacto?</label>
+                <input type="text" id="impactoFalha" placeholder="Descrever o impacto em caso de falha">
+            </div>
+        </div>
+
+        <!-- 5. PRÉ-CHECK -->
+        <div class="section">
+            <div class="section-title"><i class="fas fa-check-double"></i> 5. Pré-Check (Obrigatório)</div>
+
+            <!-- Backup -->
+            <div class="section-subtitle"><i class="fas fa-database"></i> Backup</div>
+            <div class="grid-2col">
+                <div class="field-group">
+                    <label>Backup da configuração realizado</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="checkbox" id="backupRealizado"> Sim</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Data do Backup</label>
+                    <input type="text" id="dataBackup" placeholder="Ex: 22/07/2026 18:30">
+                </div>
+                <div class="field-group">
+                    <label>Local onde foi salvo</label>
+                    <input type="text" id="localBackup" placeholder="Ex: /backups/">
+                </div>
+                <div class="field-group">
+                    <label>Nome do Arquivo</label>
+                    <input type="text" id="nomeArquivoBackup" placeholder="Ex: config_backup_20260722.cfg">
+                </div>
+                <div class="field-group">
+                    <label>Hash MD5/SHA256 conferido</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="hashConferido" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="hashConferido" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Backup testado</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="backupTestado" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="backupTestado" value="Não"> Não</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Firmware -->
+            <div class="section-subtitle"><i class="fas fa-microchip"></i> Firmware</div>
+            <div class="grid-2col">
+                <div class="field-group">
+                    <label>Versão atual</label>
+                    <input type="text" id="versaoAtual" placeholder="Ex: 10.5.0">
+                </div>
+                <div class="field-group">
+                    <label>Versão nova</label>
+                    <input type="text" id="versaoNova" placeholder="Ex: 10.6.0">
+                </div>
+                <div class="field-group">
+                    <label>Arquivo utilizado</label>
+                    <input type="text" id="arquivoFirmware" placeholder="Ex: DM4370_10.6.0.bin">
+                </div>
+                <div class="field-group">
+                    <label>Origem do firmware</label>
+                    <input type="text" id="origemFirmware" placeholder="Ex: Site do fabricante">
+                </div>
+                <div class="field-group">
+                    <label>Foi validado junto ao fabricante?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="validadoFabricante" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="validadoFabricante" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Checksum validado?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="checksumValidado" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="checksumValidado" value="Não"> Não</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compatibilidade -->
+            <div class="section-subtitle"><i class="fas fa-project-diagram"></i> Compatibilidade</div>
+            <div class="field-group">
+                <label>Firmware compatível com:</label>
+                <div class="value-check" id="compatibilidadeList">
+                    <label class="check-item"><input type="checkbox" value="Stack"> Stack</label>
+                    <label class="check-item"><input type="checkbox" value="Outros switches"> Outros switches</label>
+                    <label class="check-item"><input type="checkbox" value="Controladora"> Controladora</label>
+                    <label class="check-item"><input type="checkbox" value="OLT"> OLT</label>
+                    <label class="check-item"><input type="checkbox" value="BNG"> BNG</label>
+                    <label class="check-item"><input type="checkbox" value="Equipamentos do fabricante"> Equipamentos do fabricante</label>
+                </div>
+            </div>
+            <div class="grid-2col">
+                <div class="field-group">
+                    <label>Release Notes analisadas?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="releaseNotes" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="releaseNotes" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Bugs conhecidos e avaliados?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="bugsAvaliados" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="bugsAvaliados" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Necessita um upgrade intermediário?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="upgradeIntermediario" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="upgradeIntermediario" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Existe procedimento oficial do fabricante?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="procedimentoFabricante" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="procedimentoFabricante" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group" style="grid-column: span 2;">
+                    <label>Link do procedimento:</label>
+                    <input type="url" id="linkProcedimento" placeholder="https://...">
+                </div>
+            </div>
+
+            <!-- Recursos -->
+            <div class="section-subtitle"><i class="fas fa-server"></i> Recursos</div>
+            <div class="grid-2col">
+                <div class="field-group">
+                    <label>Servidor onde estão os arquivos utilizados</label>
+                    <input type="text" id="servidorArquivos" placeholder="Ex: srv-firmware01">
+                </div>
+                <div class="field-group">
+                    <label>Nome da VM</label>
+                    <input type="text" id="nomeVM" placeholder="Ex: VM-FW">
+                </div>
+                <div class="field-group">
+                    <label>Pasta</label>
+                    <input type="text" id="pastaArquivos" placeholder="Ex: /iso/firmware/">
+                </div>
+                <div class="field-group">
+                    <label>Usuário</label>
+                    <input type="text" id="usuarioRecursos" placeholder="Ex: fwupdate">
+                </div>
+            </div>
+
+            <!-- Saúde dos equipamentos -->
+            <div class="section-subtitle"><i class="fas fa-heartbeat"></i> Saúde dos equipamentos envolvidos</div>
+            <div class="grid-2col">
+                <div class="field-group">
+                    <label>CPU</label>
+                    <input type="text" id="saudeCPU" placeholder="Ex: 32%">
+                </div>
+                <div class="field-group">
+                    <label>Memória</label>
+                    <input type="text" id="saudeMemoria" placeholder="Ex: 45%">
+                </div>
+                <div class="field-group">
+                    <label>Temperatura</label>
+                    <input type="text" id="saudeTemperatura" placeholder="Ex: 48°C">
+                </div>
+                <div class="field-group">
+                    <label>Fonte</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="fonteOK" value="OK"> OK</label>
+                        <label class="check-item"><input type="radio" name="fonteOK" value="Não OK"> Não OK</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Ventoinhas</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="ventoinhasOK" value="OK"> OK</label>
+                        <label class="check-item"><input type="radio" name="ventoinhasOK" value="Não OK"> Não OK</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Logs sem erros críticos</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="logsSemErros" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="logsSemErros" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Interfaces UP</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="interfacesUP" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="interfacesUP" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Sem alarmes</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="semAlarmes" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="semAlarmes" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Sem CRC elevado</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="semCRC" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="semCRC" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Sem flapping</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="semFlapping" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="semFlapping" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Sem perda</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="semPerda" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="semPerda" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>NTP sincronizado ou horário correto</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="ntpSincronizado" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="ntpSincronizado" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Licenciamento válido</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="licenciamentoValido" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="licenciamentoValido" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Radius operante</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="radiusOperante" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="radiusOperante" value="Não"> Não</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. PLANO DE EXECUÇÃO -->
+        <div class="section">
+            <div class="section-title"><i class="fas fa-list-ol"></i> 6. Plano de Execução</div>
+            <div id="planosExecucao">
+                <div class="step-block" data-step="1">
+                    <div class="step-title">Passo 1</div>
+                    <div class="step-grid">
+                        <div><label>Comando</label><input type="text" placeholder="Ex: show running-config"></div>
+                        <div><label>Resultado esperado</label><input type="text" placeholder="Ex: Configuração exibida"></div>
+                        <div><label>Tempo estimado</label><input type="text" placeholder="Ex: 3 min"></div>
+                        <div><label>Responsável</label><input type="text" placeholder="Ex: Ana"></div>
+                    </div>
+                </div>
+                <div class="step-block" data-step="2">
+                    <div class="step-title">Passo 2</div>
+                    <div class="step-grid">
+                        <div><label>Comando</label><input type="text" placeholder="Ex: copy tftp flash"></div>
+                        <div><label>Resultado esperado</label><input type="text" placeholder="Ex: Arquivo transferido"></div>
+                        <div><label>Tempo estimado</label><input type="text" placeholder="Ex: 5 min"></div>
+                        <div><label>Responsável</label><input type="text" placeholder="Ex: Carlos"></div>
+                    </div>
+                </div>
+                <div class="step-block" data-step="3">
+                    <div class="step-title">Passo 3</div>
+                    <div class="step-grid">
+                        <div><label>Comando</label><input type="text" placeholder="Ex: boot system flash:DM4370_10.6.0.bin"></div>
+                        <div><label>Resultado esperado</label><input type="text" placeholder="Ex: Imagem definida"></div>
+                        <div><label>Tempo estimado</label><input type="text" placeholder="Ex: 2 min"></div>
+                        <div><label>Responsável</label><input type="text" placeholder="Ex: Ana"></div>
+                    </div>
+                </div>
+                <div class="step-block" data-step="4">
+                    <div class="step-title">Passo 4</div>
+                    <div class="step-grid">
+                        <div><label>Comando</label><input type="text" placeholder="Ex: reload"></div>
+                        <div><label>Resultado esperado</label><input type="text" placeholder="Ex: Switch reiniciado"></div>
+                        <div><label>Tempo estimado</label><input type="text" placeholder="Ex: 8 min"></div>
+                        <div><label>Responsável</label><input type="text" placeholder="Ex: NOC"></div>
+                    </div>
+                </div>
+                <div class="step-block" data-step="5">
+                    <div class="step-title">Passo 5</div>
+                    <div class="step-grid">
+                        <div><label>Comando</label><input type="text" placeholder="Ex: show version ; show interfaces status"></div>
+                        <div><label>Resultado esperado</label><input type="text" placeholder="Ex: Versão e interfaces OK"></div>
+                        <div><label>Tempo estimado</label><input type="text" placeholder="Ex: 5 min"></div>
+                        <div><label>Responsável</label><input type="text" placeholder="Ex: Equipe"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. PLANO DE ROLLBACK -->
+        <div class="section">
+            <div class="section-title"><i class="fas fa-undo-alt"></i> 7. Plano de Rollback</div>
+            <div class="grid-2col">
+                <div class="field-group">
+                    <label>Existe downgrade suportado?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="downgradeSuportado" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="downgradeSuportado" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Procedimento documentado?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="procedimentoDocumentado" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="procedimentoDocumentado" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Firmware antigo disponível?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="firmwareAntigo" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="firmwareAntigo" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Backup íntegro?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="backupIntegro" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="backupIntegro" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Tempo estimado para rollback</label>
+                    <input type="text" id="tempoRollback" placeholder="Ex: 12 min por equipamento">
+                </div>
+                <div class="field-group">
+                    <label>Critério para abortar a atividade</label>
+                    <input type="text" id="criterioAbortar" placeholder="Ex: Perda de BGP / OSPF ou falha em 2 switches">
+                </div>
+                <div class="field-group" style="grid-column: span 2;">
+                    <label>Quem autoriza rollback?</label>
+                    <input type="text" id="autorizaRollback" placeholder="Ex: Gerente de NOC (Carlos)">
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. EXECUÇÃO -->
+        <div class="section">
+            <div class="section-title"><i class="fas fa-play"></i> 8. Execução</div>
+            <div class="grid-2col">
+                <div class="field-group">
+                    <label>Horário início</label>
+                    <input type="text" id="execucaoInicio" readonly style="background:#eef2f9;">
+                </div>
+                <div class="field-group">
+                    <label>Horário reboot</label>
+                    <input type="text" id="execucaoReboot" placeholder="Ex: 23:32">
+                </div>
+                <div class="field-group">
+                    <label>Horário retorno</label>
+                    <input type="text" id="execucaoRetorno" placeholder="Ex: 01:40">
+                </div>
+                <div class="field-group">
+                    <label>Ocorreram erros?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="ocorreramErros" value="Sim" onchange="toggleErros()"> Sim</label>
+                        <label class="check-item"><input type="radio" name="ocorreramErros" value="Não" onchange="toggleErros()"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group" style="grid-column: span 2;">
+                    <label>Descrição</label>
+                    <textarea id="descricaoErros" rows="2" placeholder="Descrever detalhes dos erros (se houver)"></textarea>
+                </div>
+                <div class="field-group">
+                    <label>Logs coletados</label>
+                    <input type="text" id="logsColetados" placeholder="Ex: /logs/chg-042/">
+                </div>
+                <div class="field-group">
+                    <label>Prints anexados</label>
+                    <div class="file-upload-group">
+                        <input type="file" id="printsAnexados" accept="image/*" multiple onchange="previewFiles(this, 'previewPrints')">
+                        <div class="file-preview" id="previewPrints"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. VALIDAÇÃO PÓS-MUDANÇA -->
+        <div class="section">
+            <div class="section-title"><i class="fas fa-check-circle"></i> 9. Validação Pós-Mudança</div>
+
+            <!-- Equipamento -->
+            <div class="section-subtitle"><i class="fas fa-server"></i> Equipamento</div>
+            <div class="grid-2col">
+                <div class="field-group">
+                    <label>Versão confirmada</label>
+                    <input type="text" id="versaoConfirmada" placeholder="Ex: 10.6.0">
+                </div>
+                <div class="field-group">
+                    <label>Boot correto</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="bootCorreto" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="bootCorreto" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Sem alarmes</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="posSemAlarmes" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="posSemAlarmes" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>CPU normal</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="cpuNormal" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="cpuNormal" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Memória normal</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="memoriaNormal" value="OK"> OK</label>
+                        <label class="check-item"><input type="radio" name="memoriaNormal" value="Não OK"> Não OK</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Temperatura normal</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="temperaturaNormal" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="temperaturaNormal" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group" style="grid-column: span 2;">
+                    <label>Testes em clientes finais dedicados e residenciais?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="testesClientes" value="Sim" onchange="toggleClientes()"> Sim</label>
+                        <label class="check-item"><input type="radio" name="testesClientes" value="Não" onchange="toggleClientes()"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group" style="grid-column: span 2;" id="quaisClientesGroup">
+                    <label>Quais clientes</label>
+                    <input type="text" id="quaisClientes" placeholder="Ex: 3 dedicados + 5 residenciais (POP Cruzeiro do Sul)">
+                </div>
+            </div>
+
+            <!-- Rede -->
+            <div class="section-subtitle"><i class="fas fa-network-wired"></i> Rede</div>
+            <div class="grid-2col">
+                <div class="field-group">
+                    <label>BGP Established</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="bgpEstablished" value="Ok"> Ok</label>
+                        <label class="check-item"><input type="radio" name="bgpEstablished" value="Não Ok"> Não Ok</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>OSPF Full</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="ospfFull" value="Ok"> Ok</label>
+                        <label class="check-item"><input type="radio" name="ospfFull" value="Não Ok"> Não Ok</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>LDP UP</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="ldpUP" value="Ok"> Ok</label>
+                        <label class="check-item"><input type="radio" name="ldpUP" value="Não Ok"> Não Ok</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>MPLS</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="mplsOk" value="Ok"> Ok</label>
+                        <label class="check-item"><input type="radio" name="mplsOk" value="Não Ok"> Não Ok</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>LACP</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="lacpOk" value="Ok"> Ok</label>
+                        <label class="check-item"><input type="radio" name="lacpOk" value="Não Ok"> Não Ok</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>RSTP</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="rstpOk" value="Ok"> Ok</label>
+                        <label class="check-item"><input type="radio" name="rstpOk" value="Não Ok"> Não Ok</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>VRRP</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="vrrpOk" value="Ok"> Ok</label>
+                        <label class="check-item"><input type="radio" name="vrrpOk" value="Não Ok"> Não Ok</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>HSRP</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="hsrpOk" value="Ok"> Ok</label>
+                        <label class="check-item"><input type="radio" name="hsrpOk" value="Não Ok"> Não Ok</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>NTP sincronizado</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="ntpPos" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="ntpPos" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>SNMP funcionando</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="snmpFuncionando" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="snmpFuncionando" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Syslog funcionando</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="syslogFuncionando" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="syslogFuncionando" value="Não"> Não</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interfaces -->
+            <div class="section-subtitle"><i class="fas fa-plug"></i> Interfaces</div>
+            <div class="grid-2col">
+                <div class="field-group">
+                    <label>Todas as portas previstas retornaram?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="portasRetornaram" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="portasRetornaram" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Sem erro CRC?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="semCRCpos" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="semCRCpos" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Sem descarte?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="semDescarte" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="semDescarte" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Sem flapping?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="semFlappingPos" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="semFlappingPos" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Sem LOS?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="semLOS" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="semLOS" value="Não"> Não</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Serviços -->
+            <div class="section-subtitle"><i class="fas fa-wifi"></i> Serviços</div>
+            <div class="field-group">
+                <label>Clientes autenticando</label>
+                <div class="grid-2col" style="margin-top:0.3rem;">
+                    <div class="field-group">
+                        <label>PPPoE</label>
+                        <div class="value-check">
+                            <label class="check-item"><input type="radio" name="pppoeOk" value="Sim"> Sim</label>
+                            <label class="check-item"><input type="radio" name="pppoeOk" value="Não"> Não</label>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>DHCP</label>
+                        <div class="value-check">
+                            <label class="check-item"><input type="radio" name="dhcpOk" value="Sim"> Sim</label>
+                            <label class="check-item"><input type="radio" name="dhcpOk" value="Não"> Não</label>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>Internet</label>
+                        <div class="value-check">
+                            <label class="check-item"><input type="radio" name="internetOk" value="Sim"> Sim</label>
+                            <label class="check-item"><input type="radio" name="internetOk" value="Não"> Não</label>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>Telefonia</label>
+                        <div class="value-check">
+                            <label class="check-item"><input type="radio" name="telefoniaOk" value="Sim"> Sim</label>
+                            <label class="check-item"><input type="radio" name="telefoniaOk" value="Não"> Não</label>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>TV</label>
+                        <div class="value-check">
+                            <label class="check-item"><input type="radio" name="tvOk" value="Sim"> Sim</label>
+                            <label class="check-item"><input type="radio" name="tvOk" value="Não"> Não</label>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>VPN</label>
+                        <div class="value-check">
+                            <label class="check-item"><input type="radio" name="vpnOk" value="Sim"> Sim</label>
+                            <label class="check-item"><input type="radio" name="vpnOk" value="Não"> Não</label>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>Monitoramento Zabbix</label>
+                        <div class="value-check">
+                            <label class="check-item"><input type="radio" name="zabbixOk" value="Ok"> Ok</label>
+                            <label class="check-item"><input type="radio" name="zabbixOk" value="Não OK"> Não OK</label>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>LibreNMS</label>
+                        <div class="value-check">
+                            <label class="check-item"><input type="radio" name="libreNMSOk" value="Sim"> Sim</label>
+                            <label class="check-item"><input type="radio" name="libreNMSOk" value="Não"> Não</label>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>Netflow</label>
+                        <div class="value-check">
+                            <label class="check-item"><input type="radio" name="netflowOk" value="Sim"> Sim</label>
+                            <label class="check-item"><input type="radio" name="netflowOk" value="Não"> Não</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. MONITORAMENTO -->
+        <div class="section">
+            <div class="section-title"><i class="fas fa-chart-line"></i> 10. Monitoramento</div>
+            <div class="field-group">
+                <label>Monitorar por:</label>
+                <div class="value-check">
+                    <label class="check-item"><input type="checkbox" value="15 minutos"> 15 minutos</label>
+                    <label class="check-item"><input type="checkbox" value="30 minutos"> 30 minutos</label>
+                    <label class="check-item"><input type="checkbox" value="1 hora"> 1 hora</label>
+                    <label class="check-item"><input type="checkbox" value="24 horas"> 24 horas</label>
+                </div>
+            </div>
+            <div class="grid-2col">
+                <div class="field-group">
+                    <label>Alarmes encontrados</label>
+                    <input type="text" id="alarmesEncontrados" placeholder="Descrever alarmes encontrados">
+                </div>
+                <div class="field-group">
+                    <label>Ações realizadas</label>
+                    <input type="text" id="acoesRealizadas" placeholder="Descrever ações tomadas">
+                </div>
+            </div>
+        </div>
+
+        <!-- 11. EVIDÊNCIAS -->
+        <div class="section">
+            <div class="section-title"><i class="fas fa-file-alt"></i> 11. Evidências</div>
+            <div class="field-group">
+                <label>Anexar e informar em qual VM estão os anexos</label>
+                <input type="text" id="vmEvidencias" placeholder="Ex: srv-evidence · /chg-042/">
+            </div>
+            <div class="grid-2col">
+                <div class="field-group">
+                    <label>Backup</label>
+                    <input type="text" id="evidenciaBackup" placeholder="Ex: backup.cfg">
+                </div>
+                <div class="field-group">
+                    <label>Print da versão</label>
+                    <div class="file-upload-group">
+                        <input type="file" accept="image/*" onchange="previewFiles(this, 'previewVersao')">
+                        <div class="file-preview" id="previewVersao"></div>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Print do uptime</label>
+                    <div class="file-upload-group">
+                        <input type="file" accept="image/*" onchange="previewFiles(this, 'previewUptime')">
+                        <div class="file-preview" id="previewUptime"></div>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Logs</label>
+                    <div class="file-upload-group">
+                        <input type="file" accept=".log,.txt" onchange="previewFiles(this, 'previewLogs')">
+                        <div class="file-preview" id="previewLogs"></div>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Screenshots</label>
+                    <div class="file-upload-group">
+                        <input type="file" accept="image/*" multiple onchange="previewFiles(this, 'previewScreenshots')">
+                        <div class="file-preview" id="previewScreenshots"></div>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Comandos executados</label>
+                    <input type="text" id="comandosExecutados" placeholder="Ex: show version, show running-config">
+                </div>
+                <div class="field-group" style="grid-column: span 2;">
+                    <label>Release Notes</label>
+                    <input type="text" id="releaseNotesEvidencia" placeholder="Ex: release_notes_v10.6.0.pdf">
+                </div>
+            </div>
+        </div>
+
+        <!-- 12. ENCERRAMENTO -->
+        <div class="section">
+            <div class="section-title"><i class="fas fa-flag-checkered"></i> 12. Encerramento</div>
+            <div class="grid-2col">
+                <div class="field-group">
+                    <label>Mudança concluída com sucesso?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="concluidaSucesso" value="Sim"> Sim</label>
+                        <label class="check-item"><input type="radio" name="concluidaSucesso" value="Não"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label>Necessário acompanhamento?</label>
+                    <div class="value-check">
+                        <label class="check-item"><input type="radio" name="necessarioAcompanhamento" value="Sim" onchange="togglePendencias()"> Sim</label>
+                        <label class="check-item"><input type="radio" name="necessarioAcompanhamento" value="Não" onchange="togglePendencias()"> Não</label>
+                    </div>
+                </div>
+                <div class="field-group" style="grid-column: span 2;" id="pendenciasGroup">
+                    <label>Pendências</label>
+                    <textarea id="pendencias" rows="2" placeholder="Descrever pendências (se houver)"></textarea>
+                </div>
+                <div class="field-group" style="grid-column: span 2;">
+                    <label>Lições aprendidas</label>
+                    <textarea id="licoesAprendidas" rows="2" placeholder="Ex: Realizar prévia em laboratório; validar checksum com mais tempo."></textarea>
+                </div>
+                <div class="field-group" style="grid-column: span 2;">
+                    <label>Observações</label>
+                    <textarea id="observacoes" rows="2" placeholder="Ex: Atualização concluída dentro da janela. Todos os clientes retornaram sem intervenção."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 13. APROVAÇÕES -->
+        <div class="section">
+            <div class="section-title"><i class="fas fa-signature"></i> 13. Aprovações</div>
+            <div class="approval-line">
+                <div class="approval-item">
+                    <span class="label">Executor</span>
+                    <input type="text" id="aprovadorExecutor" placeholder="Nome do executor">
+                    <div class="line"></div>
+                </div>
+                <div class="approval-item">
+                    <span class="label">Supervisor</span>
+                    <input type="text" id="aprovadorSupervisor" placeholder="Nome do supervisor">
+                    <div class="line"></div>
+                </div>
+                <div class="approval-item">
+                    <span class="label">Gerente</span>
+                    <input type="text" id="aprovadorGerente" placeholder="Nome do gerente">
+                    <div class="line"></div>
+                </div>
+                <div class="approval-item">
+                    <span class="label">Data</span>
+                    <span id="aprovadorData" style="font-size:0.9rem; font-weight:500; padding-top:0.2rem;"></span>
+                    <div class="line"></div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: #5f7395; flex-wrap: wrap;">
+            <span>Checklist de Mudança Programada · v2.0</span>
+            <span>Documento gerado para engenharia de ISP</span>
+        </div>
+    </div>
+
+    <!-- BOTÕES -->
+    <div class="print-button">
+        <button class="btn-generate" onclick="gerarRelatorio()"><i class="fas fa-file-pdf"></i> Gerar Relatório</button>
+        <button class="btn-print" onclick="window.print()"><i class="fas fa-print"></i> Imprimir / PDF</button>
+    </div>
+
+    <script>
+        // ========== AUTOMAÇÃO DE DATA/HORA ==========
+        function formatarDataHora() {
+            const agora = new Date();
+            const dia = String(agora.getDate()).padStart(2, '0');
+            const mes = String(agora.getMonth() + 1).padStart(2, '0');
+            const ano = agora.getFullYear();
+            const hora = String(agora.getHours()).padStart(2, '0');
+            const min = String(agora.getMinutes()).padStart(2, '0');
+            return {
+                data: `${dia}/${mes}/${ano}`,
+                hora: `${hora}:${min}`,
+                dataHora: `${dia}/${mes}/${ano} ${hora}:${min}`,
+                dataCompleta: `${dia}/${mes}/${ano}`,
+                ano: ano
+            };
+        }
+
+        function preencherCamposAutomaticos() {
+            const agora = formatarDataHora();
+            const ano = agora.ano;
+            const numeroMudanca = document.getElementById('numeroMudanca');
+            const dataExecucao = document.getElementById('dataExecucao');
+            const horarioInicio = document.getElementById('horarioInicio');
+            const execucaoInicio = document.getElementById('execucaoInicio');
+            const aprovadorData = document.getElementById('aprovadorData');
+
+            // Número da mudança: 0000/ano
+            numeroMudanca.value = `0001/${ano}`;
+            dataExecucao.value = agora.data;
+            horarioInicio.value = agora.hora;
+            execucaoInicio.value = agora.hora;
+            aprovadorData.textContent = agora.dataCompleta;
+        }
+
+        // ========== GERAR RELATÓRIO (atualiza horário de término) ==========
+        function gerarRelatorio() {
+            const agora = formatarDataHora();
+            document.getElementById('horarioTermino').value = agora.hora;
+            alert('Relatório gerado! Horário de término atualizado. Você pode imprimir ou salvar como PDF.');
+        }
+
+        // ========== TABELA DE EQUIPAMENTOS ==========
+        function adicionarLinhaEquipamento() {
+            const tbody = document.getElementById('equipamentosBody');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="text" placeholder="Hostname"></td>
+                <td><input type="text" placeholder="Modelo"></td>
+                <td><input type="text" placeholder="Serial"></td>
+                <td><input type="text" placeholder="Local"></td>
+                <td><input type="text" placeholder="IP de gerência"></td>
+                <td><input type="text" placeholder="Versão atual"></td>
+                <td><input type="text" placeholder="Versão destino"></td>
+                <td><button class="btn-remove-row" onclick="removerLinhaEquipamento(this)">✕</button></td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        function removerLinhaEquipamento(botao) {
+            const tr = botao.closest('tr');
+            const tbody = document.getElementById('equipamentosBody');
+            if (tbody.children.length > 1) {
+                tr.remove();
+            } else {
+                alert('É necessário manter pelo menos uma linha.');
+            }
+        }
+
+        // ========== FUNÇÕES DE CONDICIONAL ==========
+        function toggleClientes() {
+            const sim = document.querySelector('input[name="testesClientes"][value="Sim"]');
+            const group = document.getElementById('quaisClientesGroup');
+            if (sim && sim.checked) {
+                group.style.display = 'block';
+            } else {
+                group.style.display = 'none';
+                document.getElementById('quaisClientes').value = '';
+            }
+        }
+
+        function togglePendencias() {
+            const sim = document.querySelector('input[name="necessarioAcompanhamento"][value="Sim"]');
+            const group = document.getElementById('pendenciasGroup');
+            if (sim && sim.checked) {
+                group.style.display = 'block';
+            } else {
+                group.style.display = 'none';
+                document.getElementById('pendencias').value = '';
+            }
+        }
+
+        function toggleErros() {
+            const sim = document.querySelector('input[name="ocorreramErros"][value="Sim"]');
+            const descricao = document.getElementById('descricaoErros');
+            if (sim && sim.checked) {
+                descricao.style.display = 'block';
+            } else {
+                descricao.style.display = 'none';
+                descricao.value = '';
+            }
+        }
+
+        // ========== PREVIEW DE ARQUIVOS ==========
+        function previewFiles(input, previewId) {
+            const preview = document.getElementById(previewId);
+            preview.innerHTML = '';
+            if (input.files) {
+                Array.from(input.files).forEach(file => {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.style.maxHeight = '60px';
+                            img.style.borderRadius = '6px';
+                            img.style.border = '1px solid #ddd';
+                            preview.appendChild(img);
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        const span = document.createElement('span');
+                        span.className = 'file-name';
+                        span.textContent = file.name;
+                        preview.appendChild(span);
+                    }
+                });
+            }
+        }
+
+        // ========== INICIALIZAÇÃO ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            preencherCamposAutomaticos();
+            toggleClientes();
+            togglePendencias();
+            toggleErros();
+            // Esconde campos condicionais inicialmente
+            document.getElementById('quaisClientesGroup').style.display = 'none';
+            document.getElementById('pendenciasGroup').style.display = 'none';
+            document.getElementById('descricaoErros').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
