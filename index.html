@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checklist de Mudança Programada · Parte 1</title>
+    <title>Checklist de Mudança Programada</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -413,6 +413,37 @@
             color: #1c3a6b;
         }
 
+        /* Estilos para validação */
+        .campo-invalido {
+            border-color: #dc3545 !important;
+            background-color: #fff5f5 !important;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.15) !important;
+        }
+
+        .campo-invalido:focus {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25) !important;
+        }
+
+        .mensagem-erro {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border-left: 5px solid #dc3545;
+            margin-bottom: 1.5rem;
+            display: none;
+            font-weight: 500;
+        }
+
+        .mensagem-erro.visivel {
+            display: block;
+        }
+
+        .mensagem-erro ul {
+            margin: 0.5rem 0 0 1.5rem;
+            font-weight: 400;
+        }
     </style>
 </head>
 <body>
@@ -422,8 +453,15 @@
             <div class="logo-area">
                 <img src="https://i.imgur.com/dvzRyus.png" alt="Logomarca da empresa" />
                 <span class="title-doc">Mudança Programada</span>
-                <span class="subtitle"><i class="fas fa-clipboard-list"></i> Checklist · Parte 1 de 2</span>
+                <span class="subtitle"><i class="fas fa-clipboard-list"></i> Checklist</span>
             </div>
+        </div>
+
+        <!-- MENSAGEM DE ERRO -->
+        <div class="mensagem-erro" id="mensagemErro">
+            <i class="fas fa-exclamation-circle"></i>
+            <strong>ATENÇÃO!</strong> Os seguintes campos precisam ser preenchidos:
+            <ul id="listaErros"></ul>
         </div>
 
         <!-- 1. IDENTIFICAÇÃO -->
@@ -899,15 +937,45 @@
 
         <hr>
         <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: #5f7395; flex-wrap: wrap;">
+            <span>Checklist de Mudança Programada</span>
             <span>Documento gerado para engenharia de ISP</span>
         </div>
     </div>
 
     <div class="print-button">
-        <button class="btn-print" onclick="window.print()"><i class="fas fa-print"></i> Imprimir / PDF</button>
+        <button class="btn-generate" onclick="gerarRelatorio()"><i class="fas fa-save"></i> Gerar Relatório</button>
+        <button class="btn-print" onclick="salvarPDF()"><i class="fas fa-file-pdf"></i> Salvar PDF</button>
     </div>
 
     <script>
+        // ========== BANCO DE DADOS SIMULADO (localStorage) ==========
+        function getProximoNumeroMudanca() {
+            const anoAtual = new Date().getFullYear();
+            let ultimoNumero = localStorage.getItem('ultimoNumeroMudanca');
+            let ultimoAno = localStorage.getItem('ultimoAnoMudanca');
+            
+            if (!ultimoNumero || !ultimoAno || parseInt(ultimoAno) !== anoAtual) {
+                // Se não tem registro ou mudou o ano, começa do 1
+                localStorage.setItem('ultimoNumeroMudanca', '1');
+                localStorage.setItem('ultimoAnoMudanca', anoAtual.toString());
+                return `0001/${anoAtual}`;
+            }
+            
+            let numero = parseInt(ultimoNumero) + 1;
+            let numeroFormatado = String(numero).padStart(4, '0');
+            localStorage.setItem('ultimoNumeroMudanca', numero.toString());
+            return `${numeroFormatado}/${anoAtual}`;
+        }
+
+        function salvarMudanca(dados) {
+            // Salvar no localStorage como histórico
+            let historico = JSON.parse(localStorage.getItem('historicoMudancas') || '[]');
+            dados.id = Date.now();
+            dados.dataCriacao = new Date().toISOString();
+            historico.push(dados);
+            localStorage.setItem('historicoMudancas', JSON.stringify(historico));
+        }
+
         // ========== CAPITALIZAR PRIMEIRA LETRA ==========
         function capitalizarPrimeiraLetra(element) {
             if (element.value && element.value.length > 0) {
@@ -946,12 +1014,11 @@
 
         function preencherCamposAutomaticos() {
             const agora = formatarDataHora();
-            const ano = agora.ano;
             const numeroMudanca = document.getElementById('numeroMudanca');
             const dataExecucao = document.getElementById('dataExecucao');
             const horarioInicio = document.getElementById('horarioInicio');
 
-            numeroMudanca.value = `0001/${ano}`;
+            numeroMudanca.value = getProximoNumeroMudanca();
             dataExecucao.value = agora.data;
             horarioInicio.value = agora.hora;
         }
@@ -1028,6 +1095,264 @@
                 passo.dataset.step = index + 1;
             });
             contadorPassos = passos.length;
+        }
+
+        // ========== VALIDAÇÃO DE CAMPOS ==========
+        function validarCampos() {
+            const camposInvalidos = [];
+            const erros = [];
+
+            // 1. Identificação
+            const horarioPrevisto = document.getElementById('horarioPrevisto');
+            const responsavelExecucao = document.getElementById('responsavelExecucao');
+            const responsavelAprovacao = document.getElementById('responsavelAprovacao');
+            const equipeEnvolvida = document.getElementById('equipeEnvolvida');
+            const janelaManutencao = document.getElementById('janelaManutencao');
+
+            if (!horarioPrevisto.value.trim()) { camposInvalidos.push(horarioPrevisto); erros.push('Horário Previsto'); }
+            if (!responsavelExecucao.value.trim()) { camposInvalidos.push(responsavelExecucao); erros.push('Responsável pela Execução'); }
+            if (!responsavelAprovacao.value.trim()) { camposInvalidos.push(responsavelAprovacao); erros.push('Responsável pela Aprovação'); }
+            if (!equipeEnvolvida.value.trim()) { camposInvalidos.push(equipeEnvolvida); erros.push('Equipe Envolvida'); }
+            if (!janelaManutencao.value.trim()) { camposInvalidos.push(janelaManutencao); erros.push('Janela de Manutenção'); }
+
+            // Tipo de atividade (pelo menos um checkbox)
+            const checkboxesTipo = document.querySelectorAll('#tipoAtividade input[type="checkbox"]');
+            const algumTipoMarcado = Array.from(checkboxesTipo).some(cb => cb.checked);
+            if (!algumTipoMarcado) {
+                erros.push('Tipo de Atividade (selecione pelo menos um)');
+                document.getElementById('tipoAtividade').style.border = '2px solid #dc3545';
+                document.getElementById('tipoAtividade').style.borderRadius = '10px';
+            } else {
+                document.getElementById('tipoAtividade').style.border = 'none';
+            }
+
+            // 2. Objetivo
+            const objetivo = document.getElementById('objetivoMudanca');
+            if (!objetivo.value.trim()) { camposInvalidos.push(objetivo); erros.push('Objetivo da Mudança'); }
+
+            // 3. Equipamentos (pelo menos um equipamento com dados)
+            const linhasEquipamentos = document.querySelectorAll('#equipamentosBody tr');
+            let temEquipamentoValido = false;
+            linhasEquipamentos.forEach(tr => {
+                const inputs = tr.querySelectorAll('input[type="text"]');
+                const preenchidos = Array.from(inputs).filter(inp => inp.value.trim() !== '');
+                if (preenchidos.length >= 3) temEquipamentoValido = true;
+            });
+            if (!temEquipamentoValido) {
+                erros.push('Equipamentos (preencha pelo menos um equipamento)');
+                document.getElementById('tabelaEquipamentos').style.border = '2px solid #dc3545';
+                document.getElementById('tabelaEquipamentos').style.borderRadius = '10px';
+            } else {
+                document.getElementById('tabelaEquipamentos').style.border = 'none';
+            }
+
+            // 4. Análise de Impacto
+            const clientesAfetados = document.getElementById('clientesAfetados');
+            const circuitosAfetados = document.getElementById('circuitosAfetados');
+            const servicosAfetados = document.getElementById('servicosAfetados');
+            const tempoIndisponibilidade = document.getElementById('tempoIndisponibilidade');
+            const impactoFalha = document.getElementById('impactoFalha');
+
+            if (!clientesAfetados.value.trim()) { camposInvalidos.push(clientesAfetados); erros.push('Clientes Afetados'); }
+            if (!circuitosAfetados.value.trim()) { camposInvalidos.push(circuitosAfetados); erros.push('Circuitos Afetados'); }
+            if (!servicosAfetados.value.trim()) { camposInvalidos.push(servicosAfetados); erros.push('Serviços Afetados'); }
+            if (!tempoIndisponibilidade.value.trim()) { camposInvalidos.push(tempoIndisponibilidade); erros.push('Tempo Estimado de Indisponibilidade'); }
+            if (!impactoFalha.value.trim()) { camposInvalidos.push(impactoFalha); erros.push('Impacto em Caso de Falha'); }
+
+            // Redundância
+            const redundanciaSelecionada = document.querySelector('input[name="redundancia"]:checked');
+            if (!redundanciaSelecionada) {
+                erros.push('Redundância (selecione Sim ou Não)');
+                document.querySelector('.field-group:has(input[name="redundancia"]) .value-check').style.border = '2px solid #dc3545';
+            } else {
+                document.querySelector('.field-group:has(input[name="redundancia"]) .value-check').style.border = 'none';
+            }
+
+            // 5. Pré-Check - Backup
+            const dataBackup = document.getElementById('dataBackup');
+            const localBackup = document.getElementById('localBackup');
+            const nomeArquivoBackup = document.getElementById('nomeArquivoBackup');
+
+            if (!dataBackup.value.trim()) { camposInvalidos.push(dataBackup); erros.push('Data do Backup'); }
+            if (!localBackup.value.trim()) { camposInvalidos.push(localBackup); erros.push('Local do Backup'); }
+            if (!nomeArquivoBackup.value.trim()) { camposInvalidos.push(nomeArquivoBackup); erros.push('Nome do Arquivo de Backup'); }
+
+            // 5. Pré-Check - Firmware
+            const versaoAtual = document.getElementById('versaoAtual');
+            const versaoNova = document.getElementById('versaoNova');
+            const arquivoFirmware = document.getElementById('arquivoFirmware');
+            const origemFirmware = document.getElementById('origemFirmware');
+
+            if (!versaoAtual.value.trim()) { camposInvalidos.push(versaoAtual); erros.push('Versão Atual do Firmware'); }
+            if (!versaoNova.value.trim()) { camposInvalidos.push(versaoNova); erros.push('Versão Nova do Firmware'); }
+            if (!arquivoFirmware.value.trim()) { camposInvalidos.push(arquivoFirmware); erros.push('Arquivo do Firmware'); }
+            if (!origemFirmware.value.trim()) { camposInvalidos.push(origemFirmware); erros.push('Origem do Firmware'); }
+
+            // 6. Plano de Execução
+            const passos = document.querySelectorAll('.step-block');
+            passos.forEach((passo, index) => {
+                const inputs = passo.querySelectorAll('input[type="text"]');
+                inputs.forEach(input => {
+                    if (!input.value.trim()) {
+                        camposInvalidos.push(input);
+                        erros.push(`Passo ${index + 1} - ${input.parentElement.querySelector('label').textContent}`);
+                    }
+                });
+            });
+
+            // 7. Plano de Rollback
+            const tempoRollback = document.getElementById('tempoRollback');
+            const criterioAbortar = document.getElementById('criterioAbortar');
+            const autorizaRollback = document.getElementById('autorizaRollback');
+
+            if (!tempoRollback.value.trim()) { camposInvalidos.push(tempoRollback); erros.push('Tempo Estimado para Rollback'); }
+            if (!criterioAbortar.value.trim()) { camposInvalidos.push(criterioAbortar); erros.push('Critério para Abortar'); }
+            if (!autorizaRollback.value.trim()) { camposInvalidos.push(autorizaRollback); erros.push('Quem Autoriza Rollback'); }
+
+            // Aplicar classe de erro nos campos inválidos
+            document.querySelectorAll('.campo-invalido').forEach(el => el.classList.remove('campo-invalido'));
+            camposInvalidos.forEach(campo => campo.classList.add('campo-invalido'));
+
+            // Mostrar mensagem de erro
+            const mensagemErro = document.getElementById('mensagemErro');
+            const listaErros = document.getElementById('listaErros');
+            
+            if (erros.length > 0) {
+                listaErros.innerHTML = erros.map(erro => `<li>${erro}</li>`).join('');
+                mensagemErro.classList.add('visivel');
+                mensagemErro.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return false;
+            } else {
+                mensagemErro.classList.remove('visivel');
+                return true;
+            }
+        }
+
+        // ========== GERAR RELATÓRIO ==========
+        function gerarRelatorio() {
+            const agora = formatarDataHora();
+            document.getElementById('horarioTermino').value = agora.hora;
+            
+            if (!validarCampos()) {
+                return;
+            }
+
+            // Coletar dados para salvar
+            const dados = coletarDados();
+            salvarMudanca(dados);
+            
+            // Atualizar número da mudança para o próximo
+            const numeroMudanca = document.getElementById('numeroMudanca');
+            numeroMudanca.value = getProximoNumeroMudanca();
+            
+            alert('✅ Relatório gerado com sucesso! Os dados foram salvos no histórico local.');
+        }
+
+        // ========== SALVAR PDF ==========
+        function salvarPDF() {
+            if (!validarCampos()) {
+                return;
+            }
+
+            // Usar a função de impressão do navegador para salvar como PDF
+            window.print();
+        }
+
+        // ========== COLETAR DADOS ==========
+        function coletarDados() {
+            const dados = {
+                numeroMudanca: document.getElementById('numeroMudanca').value,
+                dataExecucao: document.getElementById('dataExecucao').value,
+                horarioPrevisto: document.getElementById('horarioPrevisto').value,
+                horarioInicio: document.getElementById('horarioInicio').value,
+                horarioTermino: document.getElementById('horarioTermino').value,
+                responsavelExecucao: document.getElementById('responsavelExecucao').value,
+                responsavelAprovacao: document.getElementById('responsavelAprovacao').value,
+                equipeEnvolvida: document.getElementById('equipeEnvolvida').value,
+                janelaManutencao: document.getElementById('janelaManutencao').value,
+                tipoAtividade: Array.from(document.querySelectorAll('#tipoAtividade input:checked')).map(cb => cb.value),
+                objetivoMudanca: document.getElementById('objetivoMudanca').value,
+                equipamentos: [],
+                clientesAfetados: document.getElementById('clientesAfetados').value,
+                circuitosAfetados: document.getElementById('circuitosAfetados').value,
+                servicosAfetados: document.getElementById('servicosAfetados').value,
+                tempoIndisponibilidade: document.getElementById('tempoIndisponibilidade').value,
+                redundancia: document.querySelector('input[name="redundancia"]:checked')?.value || '',
+                impactoFalha: document.getElementById('impactoFalha').value,
+                backupRealizado: document.getElementById('backupRealizado').checked,
+                dataBackup: document.getElementById('dataBackup').value,
+                localBackup: document.getElementById('localBackup').value,
+                nomeArquivoBackup: document.getElementById('nomeArquivoBackup').value,
+                hashConferido: document.querySelector('input[name="hashConferido"]:checked')?.value || '',
+                backupTestado: document.querySelector('input[name="backupTestado"]:checked')?.value || '',
+                versaoAtual: document.getElementById('versaoAtual').value,
+                versaoNova: document.getElementById('versaoNova').value,
+                arquivoFirmware: document.getElementById('arquivoFirmware').value,
+                origemFirmware: document.getElementById('origemFirmware').value,
+                validadoFabricante: document.querySelector('input[name="validadoFabricante"]:checked')?.value || '',
+                checksumValidado: document.querySelector('input[name="checksumValidado"]:checked')?.value || '',
+                compatibilidade: Array.from(document.querySelectorAll('#compatibilidadeList input:checked')).map(cb => cb.value),
+                releaseNotes: document.querySelector('input[name="releaseNotes"]:checked')?.value || '',
+                bugsAvaliados: document.querySelector('input[name="bugsAvaliados"]:checked')?.value || '',
+                upgradeIntermediario: document.querySelector('input[name="upgradeIntermediario"]:checked')?.value || '',
+                procedimentoFabricante: document.querySelector('input[name="procedimentoFabricante"]:checked')?.value || '',
+                linkProcedimento: document.getElementById('linkProcedimento').value,
+                servidorArquivos: document.getElementById('servidorArquivos').value,
+                nomeVM: document.getElementById('nomeVM').value,
+                pastaArquivos: document.getElementById('pastaArquivos').value,
+                usuarioRecursos: document.getElementById('usuarioRecursos').value,
+                saudeCPU: document.getElementById('saudeCPU').value,
+                saudeMemoria: document.getElementById('saudeMemoria').value,
+                saudeTemperatura: document.getElementById('saudeTemperatura').value,
+                fonteOK: document.querySelector('input[name="fonteOK"]:checked')?.value || '',
+                ventoinhasOK: document.querySelector('input[name="ventoinhasOK"]:checked')?.value || '',
+                logsSemErros: document.querySelector('input[name="logsSemErros"]:checked')?.value || '',
+                interfacesUP: document.querySelector('input[name="interfacesUP"]:checked')?.value || '',
+                semAlarmes: document.querySelector('input[name="semAlarmes"]:checked')?.value || '',
+                semCRC: document.querySelector('input[name="semCRC"]:checked')?.value || '',
+                semFlapping: document.querySelector('input[name="semFlapping"]:checked')?.value || '',
+                semPerda: document.querySelector('input[name="semPerda"]:checked')?.value || '',
+                ntpSincronizado: document.querySelector('input[name="ntpSincronizado"]:checked')?.value || '',
+                licenciamentoValido: document.querySelector('input[name="licenciamentoValido"]:checked')?.value || '',
+                radiusOperante: document.querySelector('input[name="radiusOperante"]:checked')?.value || '',
+                planoExecucao: [],
+                downgradeSuportado: document.querySelector('input[name="downgradeSuportado"]:checked')?.value || '',
+                procedimentoDocumentado: document.querySelector('input[name="procedimentoDocumentado"]:checked')?.value || '',
+                firmwareAntigo: document.querySelector('input[name="firmwareAntigo"]:checked')?.value || '',
+                backupIntegro: document.querySelector('input[name="backupIntegro"]:checked')?.value || '',
+                tempoRollback: document.getElementById('tempoRollback').value,
+                criterioAbortar: document.getElementById('criterioAbortar').value,
+                autorizaRollback: document.getElementById('autorizaRollback').value
+            };
+
+            // Coletar equipamentos
+            document.querySelectorAll('#equipamentosBody tr').forEach(tr => {
+                const inputs = tr.querySelectorAll('input[type="text"]');
+                if (inputs[0].value.trim() || inputs[1].value.trim()) {
+                    dados.equipamentos.push({
+                        hostname: inputs[0].value,
+                        modelo: inputs[1].value,
+                        serial: inputs[2].value,
+                        local: inputs[3].value,
+                        ipGerencia: inputs[4].value,
+                        versaoAtual: inputs[5].value,
+                        versaoDestino: inputs[6].value
+                    });
+                }
+            });
+
+            // Coletar plano de execução
+            document.querySelectorAll('.step-block').forEach(passo => {
+                const inputs = passo.querySelectorAll('input[type="text"]');
+                dados.planoExecucao.push({
+                    comando: inputs[0].value,
+                    resultadoEsperado: inputs[1].value,
+                    tempoEstimado: inputs[2].value,
+                    responsavel: inputs[3].value
+                });
+            });
+
+            return dados;
         }
 
         // ========== INICIALIZAÇÃO ==========
