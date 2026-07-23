@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checklist de Mudança Programada · Engenharia</title>
+    <title>Checklist de Mudança Programada · Parte 1</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -30,7 +30,6 @@
             box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.25);
         }
 
-        /* CABEÇALHO COM LOGO CENTRALIZADA */
         .header {
             display: flex;
             flex-direction: column;
@@ -142,6 +141,7 @@
         .field-group input[type="text"],
         .field-group input[type="datetime-local"],
         .field-group input[type="url"],
+        .field-group input[type="number"],
         .field-group textarea {
             width: 100%;
             padding: 0.5rem 0.8rem;
@@ -156,10 +156,21 @@
         .field-group input[type="text"]:focus,
         .field-group input[type="datetime-local"]:focus,
         .field-group input[type="url"]:focus,
+        .field-group input[type="number"]:focus,
         .field-group textarea:focus {
             outline: none;
             border-color: #2a6df4;
             box-shadow: 0 0 0 3px rgba(42, 109, 244, 0.1);
+        }
+
+        .field-group input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        .field-group input[type="number"]::-webkit-outer-spin-button,
+        .field-group input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
 
         .field-group textarea {
@@ -228,7 +239,8 @@
             border-bottom: none;
         }
 
-        .table-mini input[type="text"] {
+        .table-mini input[type="text"],
+        .table-mini input[type="number"] {
             width: 100%;
             padding: 0.3rem 0.4rem;
             border: 1px solid #d0d9e8;
@@ -237,7 +249,8 @@
             background: #fafcff;
         }
 
-        .table-mini input[type="text"]:focus {
+        .table-mini input[type="text"]:focus,
+        .table-mini input[type="number"]:focus {
             outline: none;
             border-color: #2a6df4;
         }
@@ -283,6 +296,19 @@
         .step-block .step-title {
             font-weight: 600;
             color: #0b1e3a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .step-block .step-title .btn-remove-step {
+            background: #fee8e8;
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            color: #b33;
+            cursor: pointer;
+            font-size: 0.8rem;
         }
 
         .step-block input[type="text"] {
@@ -309,103 +335,6 @@
             text-transform: uppercase;
         }
 
-        .monitoring-badge {
-            background: #e1e9f7;
-            border-radius: 40px;
-            padding: 0.2rem 0.8rem;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .approval-line {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px dashed #bcc9df;
-        }
-
-        .approval-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-            flex: 1;
-            min-width: 120px;
-        }
-
-        .approval-item .label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: #5a6f8e;
-            font-weight: 600;
-        }
-
-        .approval-item .line {
-            width: 100%;
-            border-bottom: 2px solid #1f2f4a;
-            margin-top: 4px;
-        }
-
-        .approval-item input[type="text"] {
-            border: none;
-            border-bottom: 2px solid #1f2f4a;
-            padding: 0.2rem 0;
-            font-size: 0.9rem;
-            background: transparent;
-            width: 100%;
-        }
-
-        .approval-item input[type="text"]:focus {
-            outline: none;
-            border-bottom-color: #2a6df4;
-        }
-
-        .file-upload-group {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 0.8rem;
-        }
-
-        .file-upload-group input[type="file"] {
-            padding: 0.3rem;
-            border: 1px dashed #bcc9df;
-            border-radius: 8px;
-            background: #f8faff;
-            font-size: 0.85rem;
-            max-width: 280px;
-        }
-
-        .file-upload-group .file-preview {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .file-upload-group .file-preview img {
-            max-height: 60px;
-            border-radius: 6px;
-            border: 1px solid #ddd;
-        }
-
-        .file-upload-group .file-preview .file-name {
-            font-size: 0.75rem;
-            color: #3d4f6f;
-            background: #eef2f9;
-            padding: 0.2rem 0.6rem;
-            border-radius: 20px;
-        }
-
-        .conditional-field {
-            display: none;
-        }
-
-        .conditional-field.visible {
-            display: block;
-        }
-
         @media (max-width: 700px) {
             .report-container {
                 padding: 1.5rem 1rem;
@@ -416,9 +345,6 @@
             }
             .step-block .step-grid {
                 grid-template-columns: 1fr;
-            }
-            .approval-line {
-                flex-direction: column;
             }
             .header .logo-area img {
                 height: 50px;
@@ -486,16 +412,17 @@
             font-size: 0.8rem;
             color: #1c3a6b;
         }
+
     </style>
 </head>
 <body>
     <div class="report-container" id="report">
-        <!-- CABEÇALHO COM LOGO CENTRALIZADA -->
+        <!-- CABEÇALHO -->
         <div class="header">
             <div class="logo-area">
                 <img src="https://i.imgur.com/dvzRyus.png" alt="Logomarca da empresa" />
                 <span class="title-doc">Mudança Programada</span>
-                <span class="subtitle"><i class="fas fa-clipboard-list"></i> Checklist · Engenharia de Rede</span>
+                <span class="subtitle"><i class="fas fa-clipboard-list"></i> Checklist · Parte 1 de 2</span>
             </div>
         </div>
 
@@ -513,7 +440,7 @@
                 </div>
                 <div class="field-group">
                     <label>Horário previsto</label>
-                    <input type="text" id="horarioPrevisto" placeholder="Ex: 23:00 - 02:00 (UTC-3)">
+                    <input type="text" id="horarioPrevisto" placeholder="Ex: 23:00 - 02:00 (UTC-3)" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Horário de início</label>
@@ -525,19 +452,19 @@
                 </div>
                 <div class="field-group">
                     <label>Responsável pela execução</label>
-                    <input type="text" id="responsavelExecucao" placeholder="Nome do responsável">
+                    <input type="text" id="responsavelExecucao" placeholder="Nome do responsável" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Responsável pela aprovação</label>
-                    <input type="text" id="responsavelAprovacao" placeholder="Nome do aprovador">
+                    <input type="text" id="responsavelAprovacao" placeholder="Nome do aprovador" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Equipe envolvida</label>
-                    <input type="text" id="equipeEnvolvida" placeholder="Ex: NOC · Backbone">
+                    <input type="text" id="equipeEnvolvida" placeholder="Ex: NOC · Backbone" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Janela de manutenção</label>
-                    <input type="text" id="janelaManutencao" placeholder="Ex: 22/07 23:00 – 23/07 03:00">
+                    <input type="text" id="janelaManutencao" placeholder="Ex: 22/07 23:00 – 23/07 03:00" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
             </div>
             <div class="field-group" style="margin-top: 0.5rem;">
@@ -561,7 +488,7 @@
         <div class="section">
             <div class="section-title"><i class="fas fa-bullseye"></i> 2. Objetivo da Mudança</div>
             <div class="field-group">
-                <textarea id="objetivoMudanca" rows="3" placeholder="Descrever exatamente o que será realizado. Exemplo: Atualização do firmware dos switches Datacom DM4370 dos POPs de Cruzeiro do Sul visando correção do bug XXXX."></textarea>
+                <textarea id="objetivoMudanca" rows="3" placeholder="Descrever exatamente o que será realizado. Exemplo: Atualização do firmware dos switches Datacom DM4370 dos POPs de Cruzeiro do Sul visando correção do bug XXXX." oninput="capitalizarPrimeiraLetra(this)"></textarea>
             </div>
         </div>
 
@@ -583,30 +510,30 @@
                 </thead>
                 <tbody id="equipamentosBody">
                     <tr>
-                        <td><input type="text" placeholder="SW-ACR-RBO-01"></td>
-                        <td><input type="text" placeholder="DM4370"></td>
-                        <td><input type="text" placeholder="BR-4382A"></td>
-                        <td><input type="text" placeholder="Rio Branco"></td>
+                        <td><input type="text" placeholder="SW-ACR-RBO-01" oninput="capitalizarPrimeiraLetra(this)"></td>
+                        <td><input type="text" placeholder="DM4370" oninput="capitalizarPrimeiraLetra(this)"></td>
+                        <td><input type="text" placeholder="BR-4382A" oninput="capitalizarPrimeiraLetra(this)"></td>
+                        <td><input type="text" placeholder="Rio Branco" oninput="capitalizarPrimeiraLetra(this)"></td>
                         <td><input type="text" placeholder="10.10.10.1"></td>
                         <td><input type="text" placeholder="10.5.0"></td>
                         <td><input type="text" placeholder="10.6.0"></td>
                         <td><button class="btn-remove-row" onclick="removerLinhaEquipamento(this)">✕</button></td>
                     </tr>
                     <tr>
-                        <td><input type="text" placeholder="SW-ACR-CZS-02"></td>
-                        <td><input type="text" placeholder="DM4370"></td>
-                        <td><input type="text" placeholder="BR-4390B"></td>
-                        <td><input type="text" placeholder="Cruzeiro do Sul"></td>
+                        <td><input type="text" placeholder="SW-ACR-CZS-02" oninput="capitalizarPrimeiraLetra(this)"></td>
+                        <td><input type="text" placeholder="DM4370" oninput="capitalizarPrimeiraLetra(this)"></td>
+                        <td><input type="text" placeholder="BR-4390B" oninput="capitalizarPrimeiraLetra(this)"></td>
+                        <td><input type="text" placeholder="Cruzeiro do Sul" oninput="capitalizarPrimeiraLetra(this)"></td>
                         <td><input type="text" placeholder="10.10.10.22"></td>
                         <td><input type="text" placeholder="10.5.2"></td>
                         <td><input type="text" placeholder="10.6.0"></td>
                         <td><button class="btn-remove-row" onclick="removerLinhaEquipamento(this)">✕</button></td>
                     </tr>
                     <tr>
-                        <td><input type="text" placeholder="SW-ACR-PVH-03"></td>
-                        <td><input type="text" placeholder="DM4370"></td>
-                        <td><input type="text" placeholder="BR-4411C"></td>
-                        <td><input type="text" placeholder="Porto Velho"></td>
+                        <td><input type="text" placeholder="SW-ACR-PVH-03" oninput="capitalizarPrimeiraLetra(this)"></td>
+                        <td><input type="text" placeholder="DM4370" oninput="capitalizarPrimeiraLetra(this)"></td>
+                        <td><input type="text" placeholder="BR-4411C" oninput="capitalizarPrimeiraLetra(this)"></td>
+                        <td><input type="text" placeholder="Porto Velho" oninput="capitalizarPrimeiraLetra(this)"></td>
                         <td><input type="text" placeholder="10.10.10.45"></td>
                         <td><input type="text" placeholder="10.5.1"></td>
                         <td><input type="text" placeholder="10.6.0"></td>
@@ -623,19 +550,19 @@
             <div class="grid-2col">
                 <div class="field-group">
                     <label>Clientes afetados</label>
-                    <input type="text" id="clientesAfetados" placeholder="Ex: ~120 (residencial + dedicado)">
+                    <input type="text" id="clientesAfetados" placeholder="Ex: ~120 (residencial + dedicado)" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Circuitos afetados</label>
-                    <input type="text" id="circuitosAfetados" placeholder="Ex: 4 uplinks · 2 rings">
+                    <input type="text" id="circuitosAfetados" placeholder="Ex: 4 uplinks · 2 rings" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Serviços afetados</label>
-                    <input type="text" id="servicosAfetados" placeholder="Ex: Backbone · Telefonia · PPPoE">
+                    <input type="text" id="servicosAfetados" placeholder="Ex: Backbone · Telefonia · PPPoE" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Tempo estimado de indisponibilidade</label>
-                    <input type="text" id="tempoIndisponibilidade" placeholder="Ex: 15 min por switch">
+                    <input type="text" id="tempoIndisponibilidade" placeholder="Ex: 15 min por switch" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
             </div>
             <div class="field-group" style="margin-top: 0.5rem;">
@@ -647,7 +574,7 @@
             </div>
             <div class="field-group">
                 <label>Caso haja falha, qual o impacto?</label>
-                <input type="text" id="impactoFalha" placeholder="Descrever o impacto em caso de falha">
+                <input type="text" id="impactoFalha" placeholder="Descrever o impacto em caso de falha" oninput="capitalizarPrimeiraLetra(this)">
             </div>
         </div>
 
@@ -666,15 +593,15 @@
                 </div>
                 <div class="field-group">
                     <label>Data do Backup</label>
-                    <input type="text" id="dataBackup" placeholder="Ex: 22/07/2026 18:30">
+                    <input type="text" id="dataBackup" placeholder="Ex: 22/07/2026 18:30" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Local onde foi salvo</label>
-                    <input type="text" id="localBackup" placeholder="Ex: /backups/">
+                    <input type="text" id="localBackup" placeholder="Ex: /backups/" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Nome do Arquivo</label>
-                    <input type="text" id="nomeArquivoBackup" placeholder="Ex: config_backup_20260722.cfg">
+                    <input type="text" id="nomeArquivoBackup" placeholder="Ex: config_backup_20260722.cfg" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Hash MD5/SHA256 conferido</label>
@@ -705,11 +632,11 @@
                 </div>
                 <div class="field-group">
                     <label>Arquivo utilizado</label>
-                    <input type="text" id="arquivoFirmware" placeholder="Ex: DM4370_10.6.0.bin">
+                    <input type="text" id="arquivoFirmware" placeholder="Ex: DM4370_10.6.0.bin" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Origem do firmware</label>
-                    <input type="text" id="origemFirmware" placeholder="Ex: Site do fabricante">
+                    <input type="text" id="origemFirmware" placeholder="Ex: Site do fabricante" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Foi validado junto ao fabricante?</label>
@@ -780,19 +707,19 @@
             <div class="grid-2col">
                 <div class="field-group">
                     <label>Servidor onde estão os arquivos utilizados</label>
-                    <input type="text" id="servidorArquivos" placeholder="Ex: srv-firmware01">
+                    <input type="text" id="servidorArquivos" placeholder="Ex: srv-firmware01" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Nome da VM</label>
-                    <input type="text" id="nomeVM" placeholder="Ex: VM-FW">
+                    <input type="text" id="nomeVM" placeholder="Ex: VM-FW" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Pasta</label>
-                    <input type="text" id="pastaArquivos" placeholder="Ex: /iso/firmware/">
+                    <input type="text" id="pastaArquivos" placeholder="Ex: /iso/firmware/" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Usuário</label>
-                    <input type="text" id="usuarioRecursos" placeholder="Ex: fwupdate">
+                    <input type="text" id="usuarioRecursos" placeholder="Ex: fwupdate" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
             </div>
 
@@ -801,15 +728,15 @@
             <div class="grid-2col">
                 <div class="field-group">
                     <label>CPU</label>
-                    <input type="text" id="saudeCPU" placeholder="Ex: 32%">
+                    <input type="text" id="saudeCPU" placeholder="Ex: 32%" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Memória</label>
-                    <input type="text" id="saudeMemoria" placeholder="Ex: 45%">
+                    <input type="text" id="saudeMemoria" placeholder="Ex: 45%" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Temperatura</label>
-                    <input type="text" id="saudeTemperatura" placeholder="Ex: 48°C">
+                    <input type="text" id="saudeTemperatura" placeholder="Ex: 48°C" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Fonte</label>
@@ -896,51 +823,31 @@
             <div class="section-title"><i class="fas fa-list-ol"></i> 6. Plano de Execução</div>
             <div id="planosExecucao">
                 <div class="step-block" data-step="1">
-                    <div class="step-title">Passo 1</div>
+                    <div class="step-title">
+                        Passo 1
+                        <button class="btn-remove-step" onclick="removerPasso(this)">✕</button>
+                    </div>
                     <div class="step-grid">
-                        <div><label>Comando</label><input type="text" placeholder="Ex: show running-config"></div>
-                        <div><label>Resultado esperado</label><input type="text" placeholder="Ex: Configuração exibida"></div>
-                        <div><label>Tempo estimado</label><input type="text" placeholder="Ex: 3 min"></div>
-                        <div><label>Responsável</label><input type="text" placeholder="Ex: Ana"></div>
+                        <div><label>Comando</label><input type="text" placeholder="Ex: show running-config" oninput="capitalizarPrimeiraLetra(this)"></div>
+                        <div><label>Resultado esperado</label><input type="text" placeholder="Ex: Configuração exibida" oninput="capitalizarPrimeiraLetra(this)"></div>
+                        <div><label>Tempo estimado</label><input type="text" placeholder="Ex: 3 min" oninput="capitalizarPrimeiraLetra(this)"></div>
+                        <div><label>Responsável</label><input type="text" placeholder="Ex: Ana" oninput="capitalizarPrimeiraLetra(this)"></div>
                     </div>
                 </div>
                 <div class="step-block" data-step="2">
-                    <div class="step-title">Passo 2</div>
-                    <div class="step-grid">
-                        <div><label>Comando</label><input type="text" placeholder="Ex: copy tftp flash"></div>
-                        <div><label>Resultado esperado</label><input type="text" placeholder="Ex: Arquivo transferido"></div>
-                        <div><label>Tempo estimado</label><input type="text" placeholder="Ex: 5 min"></div>
-                        <div><label>Responsável</label><input type="text" placeholder="Ex: Carlos"></div>
+                    <div class="step-title">
+                        Passo 2
+                        <button class="btn-remove-step" onclick="removerPasso(this)">✕</button>
                     </div>
-                </div>
-                <div class="step-block" data-step="3">
-                    <div class="step-title">Passo 3</div>
                     <div class="step-grid">
-                        <div><label>Comando</label><input type="text" placeholder="Ex: boot system flash:DM4370_10.6.0.bin"></div>
-                        <div><label>Resultado esperado</label><input type="text" placeholder="Ex: Imagem definida"></div>
-                        <div><label>Tempo estimado</label><input type="text" placeholder="Ex: 2 min"></div>
-                        <div><label>Responsável</label><input type="text" placeholder="Ex: Ana"></div>
-                    </div>
-                </div>
-                <div class="step-block" data-step="4">
-                    <div class="step-title">Passo 4</div>
-                    <div class="step-grid">
-                        <div><label>Comando</label><input type="text" placeholder="Ex: reload"></div>
-                        <div><label>Resultado esperado</label><input type="text" placeholder="Ex: Switch reiniciado"></div>
-                        <div><label>Tempo estimado</label><input type="text" placeholder="Ex: 8 min"></div>
-                        <div><label>Responsável</label><input type="text" placeholder="Ex: NOC"></div>
-                    </div>
-                </div>
-                <div class="step-block" data-step="5">
-                    <div class="step-title">Passo 5</div>
-                    <div class="step-grid">
-                        <div><label>Comando</label><input type="text" placeholder="Ex: show version ; show interfaces status"></div>
-                        <div><label>Resultado esperado</label><input type="text" placeholder="Ex: Versão e interfaces OK"></div>
-                        <div><label>Tempo estimado</label><input type="text" placeholder="Ex: 5 min"></div>
-                        <div><label>Responsável</label><input type="text" placeholder="Ex: Equipe"></div>
+                        <div><label>Comando</label><input type="text" placeholder="Ex: copy tftp flash" oninput="capitalizarPrimeiraLetra(this)"></div>
+                        <div><label>Resultado esperado</label><input type="text" placeholder="Ex: Arquivo transferido" oninput="capitalizarPrimeiraLetra(this)"></div>
+                        <div><label>Tempo estimado</label><input type="text" placeholder="Ex: 5 min" oninput="capitalizarPrimeiraLetra(this)"></div>
+                        <div><label>Responsável</label><input type="text" placeholder="Ex: Carlos" oninput="capitalizarPrimeiraLetra(this)"></div>
                     </div>
                 </div>
             </div>
+            <button class="btn-add-row" onclick="adicionarPasso()"><i class="fas fa-plus"></i> Adicionar passo</button>
         </div>
 
         <!-- 7. PLANO DE ROLLBACK -->
@@ -977,462 +884,49 @@
                 </div>
                 <div class="field-group">
                     <label>Tempo estimado para rollback</label>
-                    <input type="text" id="tempoRollback" placeholder="Ex: 12 min por equipamento">
+                    <input type="text" id="tempoRollback" placeholder="Ex: 12 min por equipamento" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group">
                     <label>Critério para abortar a atividade</label>
-                    <input type="text" id="criterioAbortar" placeholder="Ex: Perda de BGP / OSPF ou falha em 2 switches">
+                    <input type="text" id="criterioAbortar" placeholder="Ex: Perda de BGP / OSPF ou falha em 2 switches" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
                 <div class="field-group" style="grid-column: span 2;">
                     <label>Quem autoriza rollback?</label>
-                    <input type="text" id="autorizaRollback" placeholder="Ex: Gerente de NOC (Carlos)">
-                </div>
-            </div>
-        </div>
-
-        <!-- 8. EXECUÇÃO -->
-        <div class="section">
-            <div class="section-title"><i class="fas fa-play"></i> 8. Execução</div>
-            <div class="grid-2col">
-                <div class="field-group">
-                    <label>Horário início</label>
-                    <input type="text" id="execucaoInicio" readonly style="background:#eef2f9;">
-                </div>
-                <div class="field-group">
-                    <label>Horário reboot</label>
-                    <input type="text" id="execucaoReboot" placeholder="Ex: 23:32">
-                </div>
-                <div class="field-group">
-                    <label>Horário retorno</label>
-                    <input type="text" id="execucaoRetorno" placeholder="Ex: 01:40">
-                </div>
-                <div class="field-group">
-                    <label>Ocorreram erros?</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="ocorreramErros" value="Sim" onchange="toggleErros()"> Sim</label>
-                        <label class="check-item"><input type="radio" name="ocorreramErros" value="Não" onchange="toggleErros()"> Não</label>
-                    </div>
-                </div>
-                <div class="field-group" style="grid-column: span 2;">
-                    <label>Descrição</label>
-                    <textarea id="descricaoErros" rows="2" placeholder="Descrever detalhes dos erros (se houver)"></textarea>
-                </div>
-                <div class="field-group">
-                    <label>Logs coletados</label>
-                    <input type="text" id="logsColetados" placeholder="Ex: /logs/chg-042/">
-                </div>
-                <div class="field-group">
-                    <label>Prints anexados</label>
-                    <div class="file-upload-group">
-                        <input type="file" id="printsAnexados" accept="image/*" multiple onchange="previewFiles(this, 'previewPrints')">
-                        <div class="file-preview" id="previewPrints"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 9. VALIDAÇÃO PÓS-MUDANÇA -->
-        <div class="section">
-            <div class="section-title"><i class="fas fa-check-circle"></i> 9. Validação Pós-Mudança</div>
-
-            <!-- Equipamento -->
-            <div class="section-subtitle"><i class="fas fa-server"></i> Equipamento</div>
-            <div class="grid-2col">
-                <div class="field-group">
-                    <label>Versão confirmada</label>
-                    <input type="text" id="versaoConfirmada" placeholder="Ex: 10.6.0">
-                </div>
-                <div class="field-group">
-                    <label>Boot correto</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="bootCorreto" value="Sim"> Sim</label>
-                        <label class="check-item"><input type="radio" name="bootCorreto" value="Não"> Não</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>Sem alarmes</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="posSemAlarmes" value="Sim"> Sim</label>
-                        <label class="check-item"><input type="radio" name="posSemAlarmes" value="Não"> Não</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>CPU normal</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="cpuNormal" value="Sim"> Sim</label>
-                        <label class="check-item"><input type="radio" name="cpuNormal" value="Não"> Não</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>Memória normal</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="memoriaNormal" value="OK"> OK</label>
-                        <label class="check-item"><input type="radio" name="memoriaNormal" value="Não OK"> Não OK</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>Temperatura normal</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="temperaturaNormal" value="Sim"> Sim</label>
-                        <label class="check-item"><input type="radio" name="temperaturaNormal" value="Não"> Não</label>
-                    </div>
-                </div>
-                <div class="field-group" style="grid-column: span 2;">
-                    <label>Testes em clientes finais dedicados e residenciais?</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="testesClientes" value="Sim" onchange="toggleClientes()"> Sim</label>
-                        <label class="check-item"><input type="radio" name="testesClientes" value="Não" onchange="toggleClientes()"> Não</label>
-                    </div>
-                </div>
-                <div class="field-group" style="grid-column: span 2;" id="quaisClientesGroup">
-                    <label>Quais clientes</label>
-                    <input type="text" id="quaisClientes" placeholder="Ex: 3 dedicados + 5 residenciais (POP Cruzeiro do Sul)">
-                </div>
-            </div>
-
-            <!-- Rede -->
-            <div class="section-subtitle"><i class="fas fa-network-wired"></i> Rede</div>
-            <div class="grid-2col">
-                <div class="field-group">
-                    <label>BGP Established</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="bgpEstablished" value="Ok"> Ok</label>
-                        <label class="check-item"><input type="radio" name="bgpEstablished" value="Não Ok"> Não Ok</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>OSPF Full</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="ospfFull" value="Ok"> Ok</label>
-                        <label class="check-item"><input type="radio" name="ospfFull" value="Não Ok"> Não Ok</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>LDP UP</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="ldpUP" value="Ok"> Ok</label>
-                        <label class="check-item"><input type="radio" name="ldpUP" value="Não Ok"> Não Ok</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>MPLS</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="mplsOk" value="Ok"> Ok</label>
-                        <label class="check-item"><input type="radio" name="mplsOk" value="Não Ok"> Não Ok</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>LACP</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="lacpOk" value="Ok"> Ok</label>
-                        <label class="check-item"><input type="radio" name="lacpOk" value="Não Ok"> Não Ok</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>RSTP</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="rstpOk" value="Ok"> Ok</label>
-                        <label class="check-item"><input type="radio" name="rstpOk" value="Não Ok"> Não Ok</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>VRRP</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="vrrpOk" value="Ok"> Ok</label>
-                        <label class="check-item"><input type="radio" name="vrrpOk" value="Não Ok"> Não Ok</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>HSRP</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="hsrpOk" value="Ok"> Ok</label>
-                        <label class="check-item"><input type="radio" name="hsrpOk" value="Não Ok"> Não Ok</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>NTP sincronizado</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="ntpPos" value="Sim"> Sim</label>
-                        <label class="check-item"><input type="radio" name="ntpPos" value="Não"> Não</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>SNMP funcionando</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="snmpFuncionando" value="Sim"> Sim</label>
-                        <label class="check-item"><input type="radio" name="snmpFuncionando" value="Não"> Não</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>Syslog funcionando</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="syslogFuncionando" value="Sim"> Sim</label>
-                        <label class="check-item"><input type="radio" name="syslogFuncionando" value="Não"> Não</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Interfaces -->
-            <div class="section-subtitle"><i class="fas fa-plug"></i> Interfaces</div>
-            <div class="grid-2col">
-                <div class="field-group">
-                    <label>Todas as portas previstas retornaram?</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="portasRetornaram" value="Sim"> Sim</label>
-                        <label class="check-item"><input type="radio" name="portasRetornaram" value="Não"> Não</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>Sem erro CRC?</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="semCRCpos" value="Sim"> Sim</label>
-                        <label class="check-item"><input type="radio" name="semCRCpos" value="Não"> Não</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>Sem descarte?</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="semDescarte" value="Sim"> Sim</label>
-                        <label class="check-item"><input type="radio" name="semDescarte" value="Não"> Não</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>Sem flapping?</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="semFlappingPos" value="Sim"> Sim</label>
-                        <label class="check-item"><input type="radio" name="semFlappingPos" value="Não"> Não</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>Sem LOS?</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="semLOS" value="Sim"> Sim</label>
-                        <label class="check-item"><input type="radio" name="semLOS" value="Não"> Não</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Serviços -->
-            <div class="section-subtitle"><i class="fas fa-wifi"></i> Serviços</div>
-            <div class="field-group">
-                <label>Clientes autenticando</label>
-                <div class="grid-2col" style="margin-top:0.3rem;">
-                    <div class="field-group">
-                        <label>PPPoE</label>
-                        <div class="value-check">
-                            <label class="check-item"><input type="radio" name="pppoeOk" value="Sim"> Sim</label>
-                            <label class="check-item"><input type="radio" name="pppoeOk" value="Não"> Não</label>
-                        </div>
-                    </div>
-                    <div class="field-group">
-                        <label>DHCP</label>
-                        <div class="value-check">
-                            <label class="check-item"><input type="radio" name="dhcpOk" value="Sim"> Sim</label>
-                            <label class="check-item"><input type="radio" name="dhcpOk" value="Não"> Não</label>
-                        </div>
-                    </div>
-                    <div class="field-group">
-                        <label>Internet</label>
-                        <div class="value-check">
-                            <label class="check-item"><input type="radio" name="internetOk" value="Sim"> Sim</label>
-                            <label class="check-item"><input type="radio" name="internetOk" value="Não"> Não</label>
-                        </div>
-                    </div>
-                    <div class="field-group">
-                        <label>Telefonia</label>
-                        <div class="value-check">
-                            <label class="check-item"><input type="radio" name="telefoniaOk" value="Sim"> Sim</label>
-                            <label class="check-item"><input type="radio" name="telefoniaOk" value="Não"> Não</label>
-                        </div>
-                    </div>
-                    <div class="field-group">
-                        <label>TV</label>
-                        <div class="value-check">
-                            <label class="check-item"><input type="radio" name="tvOk" value="Sim"> Sim</label>
-                            <label class="check-item"><input type="radio" name="tvOk" value="Não"> Não</label>
-                        </div>
-                    </div>
-                    <div class="field-group">
-                        <label>VPN</label>
-                        <div class="value-check">
-                            <label class="check-item"><input type="radio" name="vpnOk" value="Sim"> Sim</label>
-                            <label class="check-item"><input type="radio" name="vpnOk" value="Não"> Não</label>
-                        </div>
-                    </div>
-                    <div class="field-group">
-                        <label>Monitoramento Zabbix</label>
-                        <div class="value-check">
-                            <label class="check-item"><input type="radio" name="zabbixOk" value="Ok"> Ok</label>
-                            <label class="check-item"><input type="radio" name="zabbixOk" value="Não OK"> Não OK</label>
-                        </div>
-                    </div>
-                    <div class="field-group">
-                        <label>LibreNMS</label>
-                        <div class="value-check">
-                            <label class="check-item"><input type="radio" name="libreNMSOk" value="Sim"> Sim</label>
-                            <label class="check-item"><input type="radio" name="libreNMSOk" value="Não"> Não</label>
-                        </div>
-                    </div>
-                    <div class="field-group">
-                        <label>Netflow</label>
-                        <div class="value-check">
-                            <label class="check-item"><input type="radio" name="netflowOk" value="Sim"> Sim</label>
-                            <label class="check-item"><input type="radio" name="netflowOk" value="Não"> Não</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 10. MONITORAMENTO -->
-        <div class="section">
-            <div class="section-title"><i class="fas fa-chart-line"></i> 10. Monitoramento</div>
-            <div class="field-group">
-                <label>Monitorar por:</label>
-                <div class="value-check">
-                    <label class="check-item"><input type="checkbox" value="15 minutos"> 15 minutos</label>
-                    <label class="check-item"><input type="checkbox" value="30 minutos"> 30 minutos</label>
-                    <label class="check-item"><input type="checkbox" value="1 hora"> 1 hora</label>
-                    <label class="check-item"><input type="checkbox" value="24 horas"> 24 horas</label>
-                </div>
-            </div>
-            <div class="grid-2col">
-                <div class="field-group">
-                    <label>Alarmes encontrados</label>
-                    <input type="text" id="alarmesEncontrados" placeholder="Descrever alarmes encontrados">
-                </div>
-                <div class="field-group">
-                    <label>Ações realizadas</label>
-                    <input type="text" id="acoesRealizadas" placeholder="Descrever ações tomadas">
-                </div>
-            </div>
-        </div>
-
-        <!-- 11. EVIDÊNCIAS -->
-        <div class="section">
-            <div class="section-title"><i class="fas fa-file-alt"></i> 11. Evidências</div>
-            <div class="field-group">
-                <label>Anexar e informar em qual VM estão os anexos</label>
-                <input type="text" id="vmEvidencias" placeholder="Ex: srv-evidence · /chg-042/">
-            </div>
-            <div class="grid-2col">
-                <div class="field-group">
-                    <label>Backup</label>
-                    <input type="text" id="evidenciaBackup" placeholder="Ex: backup.cfg">
-                </div>
-                <div class="field-group">
-                    <label>Print da versão</label>
-                    <div class="file-upload-group">
-                        <input type="file" accept="image/*" onchange="previewFiles(this, 'previewVersao')">
-                        <div class="file-preview" id="previewVersao"></div>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>Print do uptime</label>
-                    <div class="file-upload-group">
-                        <input type="file" accept="image/*" onchange="previewFiles(this, 'previewUptime')">
-                        <div class="file-preview" id="previewUptime"></div>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>Logs</label>
-                    <div class="file-upload-group">
-                        <input type="file" accept=".log,.txt" onchange="previewFiles(this, 'previewLogs')">
-                        <div class="file-preview" id="previewLogs"></div>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>Screenshots</label>
-                    <div class="file-upload-group">
-                        <input type="file" accept="image/*" multiple onchange="previewFiles(this, 'previewScreenshots')">
-                        <div class="file-preview" id="previewScreenshots"></div>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>Comandos executados</label>
-                    <input type="text" id="comandosExecutados" placeholder="Ex: show version, show running-config">
-                </div>
-                <div class="field-group" style="grid-column: span 2;">
-                    <label>Release Notes</label>
-                    <input type="text" id="releaseNotesEvidencia" placeholder="Ex: release_notes_v10.6.0.pdf">
-                </div>
-            </div>
-        </div>
-
-        <!-- 12. ENCERRAMENTO -->
-        <div class="section">
-            <div class="section-title"><i class="fas fa-flag-checkered"></i> 12. Encerramento</div>
-            <div class="grid-2col">
-                <div class="field-group">
-                    <label>Mudança concluída com sucesso?</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="concluidaSucesso" value="Sim"> Sim</label>
-                        <label class="check-item"><input type="radio" name="concluidaSucesso" value="Não"> Não</label>
-                    </div>
-                </div>
-                <div class="field-group">
-                    <label>Necessário acompanhamento?</label>
-                    <div class="value-check">
-                        <label class="check-item"><input type="radio" name="necessarioAcompanhamento" value="Sim" onchange="togglePendencias()"> Sim</label>
-                        <label class="check-item"><input type="radio" name="necessarioAcompanhamento" value="Não" onchange="togglePendencias()"> Não</label>
-                    </div>
-                </div>
-                <div class="field-group" style="grid-column: span 2;" id="pendenciasGroup">
-                    <label>Pendências</label>
-                    <textarea id="pendencias" rows="2" placeholder="Descrever pendências (se houver)"></textarea>
-                </div>
-                <div class="field-group" style="grid-column: span 2;">
-                    <label>Lições aprendidas</label>
-                    <textarea id="licoesAprendidas" rows="2" placeholder="Ex: Realizar prévia em laboratório; validar checksum com mais tempo."></textarea>
-                </div>
-                <div class="field-group" style="grid-column: span 2;">
-                    <label>Observações</label>
-                    <textarea id="observacoes" rows="2" placeholder="Ex: Atualização concluída dentro da janela. Todos os clientes retornaram sem intervenção."></textarea>
-                </div>
-            </div>
-        </div>
-
-        <!-- 13. APROVAÇÕES -->
-        <div class="section">
-            <div class="section-title"><i class="fas fa-signature"></i> 13. Aprovações</div>
-            <div class="approval-line">
-                <div class="approval-item">
-                    <span class="label">Executor</span>
-                    <input type="text" id="aprovadorExecutor" placeholder="Nome do executor">
-                    <div class="line"></div>
-                </div>
-                <div class="approval-item">
-                    <span class="label">Supervisor</span>
-                    <input type="text" id="aprovadorSupervisor" placeholder="Nome do supervisor">
-                    <div class="line"></div>
-                </div>
-                <div class="approval-item">
-                    <span class="label">Gerente</span>
-                    <input type="text" id="aprovadorGerente" placeholder="Nome do gerente">
-                    <div class="line"></div>
-                </div>
-                <div class="approval-item">
-                    <span class="label">Data</span>
-                    <span id="aprovadorData" style="font-size:0.9rem; font-weight:500; padding-top:0.2rem;"></span>
-                    <div class="line"></div>
+                    <input type="text" id="autorizaRollback" placeholder="Ex: Gerente de NOC (Carlos)" oninput="capitalizarPrimeiraLetra(this)">
                 </div>
             </div>
         </div>
 
         <hr>
         <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: #5f7395; flex-wrap: wrap;">
-            <span>Checklist de Mudança Programada · v2.0</span>
             <span>Documento gerado para engenharia de ISP</span>
         </div>
     </div>
 
-    <!-- BOTÕES -->
     <div class="print-button">
-        <button class="btn-generate" onclick="gerarRelatorio()"><i class="fas fa-file-pdf"></i> Gerar Relatório</button>
         <button class="btn-print" onclick="window.print()"><i class="fas fa-print"></i> Imprimir / PDF</button>
     </div>
 
     <script>
+        // ========== CAPITALIZAR PRIMEIRA LETRA ==========
+        function capitalizarPrimeiraLetra(element) {
+            if (element.value && element.value.length > 0) {
+                const palavras = element.value.split(' ');
+                const palavrasCapitalizadas = palavras.map(palavra => {
+                    if (palavra.length > 0) {
+                        return palavra.charAt(0).toUpperCase() + palavra.slice(1);
+                    }
+                    return palavra;
+                });
+                const novoValor = palavrasCapitalizadas.join(' ');
+                if (element.value !== novoValor) {
+                    const cursorPos = element.selectionStart;
+                    element.value = novoValor;
+                    element.setSelectionRange(cursorPos, cursorPos);
+                }
+            }
+        }
+
         // ========== AUTOMAÇÃO DE DATA/HORA ==========
         function formatarDataHora() {
             const agora = new Date();
@@ -1456,22 +950,10 @@
             const numeroMudanca = document.getElementById('numeroMudanca');
             const dataExecucao = document.getElementById('dataExecucao');
             const horarioInicio = document.getElementById('horarioInicio');
-            const execucaoInicio = document.getElementById('execucaoInicio');
-            const aprovadorData = document.getElementById('aprovadorData');
 
-            // Número da mudança: 0000/ano
             numeroMudanca.value = `0001/${ano}`;
             dataExecucao.value = agora.data;
             horarioInicio.value = agora.hora;
-            execucaoInicio.value = agora.hora;
-            aprovadorData.textContent = agora.dataCompleta;
-        }
-
-        // ========== GERAR RELATÓRIO (atualiza horário de término) ==========
-        function gerarRelatorio() {
-            const agora = formatarDataHora();
-            document.getElementById('horarioTermino').value = agora.hora;
-            alert('Relatório gerado! Horário de término atualizado. Você pode imprimir ou salvar como PDF.');
         }
 
         // ========== TABELA DE EQUIPAMENTOS ==========
@@ -1479,10 +961,10 @@
             const tbody = document.getElementById('equipamentosBody');
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td><input type="text" placeholder="Hostname"></td>
-                <td><input type="text" placeholder="Modelo"></td>
-                <td><input type="text" placeholder="Serial"></td>
-                <td><input type="text" placeholder="Local"></td>
+                <td><input type="text" placeholder="Hostname" oninput="capitalizarPrimeiraLetra(this)"></td>
+                <td><input type="text" placeholder="Modelo" oninput="capitalizarPrimeiraLetra(this)"></td>
+                <td><input type="text" placeholder="Serial" oninput="capitalizarPrimeiraLetra(this)"></td>
+                <td><input type="text" placeholder="Local" oninput="capitalizarPrimeiraLetra(this)"></td>
                 <td><input type="text" placeholder="IP de gerência"></td>
                 <td><input type="text" placeholder="Versão atual"></td>
                 <td><input type="text" placeholder="Versão destino"></td>
@@ -1501,77 +983,56 @@
             }
         }
 
-        // ========== FUNÇÕES DE CONDICIONAL ==========
-        function toggleClientes() {
-            const sim = document.querySelector('input[name="testesClientes"][value="Sim"]');
-            const group = document.getElementById('quaisClientesGroup');
-            if (sim && sim.checked) {
-                group.style.display = 'block';
+        // ========== PASSOS DO PLANO DE EXECUÇÃO ==========
+        let contadorPassos = 2;
+
+        function adicionarPasso() {
+            contadorPassos++;
+            const container = document.getElementById('planosExecucao');
+            const div = document.createElement('div');
+            div.className = 'step-block';
+            div.dataset.step = contadorPassos;
+            div.innerHTML = `
+                <div class="step-title">
+                    Passo ${contadorPassos}
+                    <button class="btn-remove-step" onclick="removerPasso(this)">✕</button>
+                </div>
+                <div class="step-grid">
+                    <div><label>Comando</label><input type="text" placeholder="Ex: comando" oninput="capitalizarPrimeiraLetra(this)"></div>
+                    <div><label>Resultado esperado</label><input type="text" placeholder="Ex: resultado" oninput="capitalizarPrimeiraLetra(this)"></div>
+                    <div><label>Tempo estimado</label><input type="text" placeholder="Ex: 5 min" oninput="capitalizarPrimeiraLetra(this)"></div>
+                    <div><label>Responsável</label><input type="text" placeholder="Ex: Nome" oninput="capitalizarPrimeiraLetra(this)"></div>
+                </div>
+            `;
+            container.appendChild(div);
+            reordenarPassos();
+        }
+
+        function removerPasso(botao) {
+            const stepBlock = botao.closest('.step-block');
+            const container = document.getElementById('planosExecucao');
+            if (container.children.length > 2) {
+                stepBlock.remove();
+                reordenarPassos();
             } else {
-                group.style.display = 'none';
-                document.getElementById('quaisClientes').value = '';
+                alert('É necessário manter pelo menos 2 passos.');
             }
         }
 
-        function togglePendencias() {
-            const sim = document.querySelector('input[name="necessarioAcompanhamento"][value="Sim"]');
-            const group = document.getElementById('pendenciasGroup');
-            if (sim && sim.checked) {
-                group.style.display = 'block';
-            } else {
-                group.style.display = 'none';
-                document.getElementById('pendencias').value = '';
-            }
-        }
-
-        function toggleErros() {
-            const sim = document.querySelector('input[name="ocorreramErros"][value="Sim"]');
-            const descricao = document.getElementById('descricaoErros');
-            if (sim && sim.checked) {
-                descricao.style.display = 'block';
-            } else {
-                descricao.style.display = 'none';
-                descricao.value = '';
-            }
-        }
-
-        // ========== PREVIEW DE ARQUIVOS ==========
-        function previewFiles(input, previewId) {
-            const preview = document.getElementById(previewId);
-            preview.innerHTML = '';
-            if (input.files) {
-                Array.from(input.files).forEach(file => {
-                    if (file.type.startsWith('image/')) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            const img = document.createElement('img');
-                            img.src = e.target.result;
-                            img.style.maxHeight = '60px';
-                            img.style.borderRadius = '6px';
-                            img.style.border = '1px solid #ddd';
-                            preview.appendChild(img);
-                        };
-                        reader.readAsDataURL(file);
-                    } else {
-                        const span = document.createElement('span');
-                        span.className = 'file-name';
-                        span.textContent = file.name;
-                        preview.appendChild(span);
-                    }
-                });
-            }
+        function reordenarPassos() {
+            const passos = document.querySelectorAll('.step-block');
+            passos.forEach((passo, index) => {
+                const titulo = passo.querySelector('.step-title');
+                const texto = titulo.childNodes[0];
+                texto.textContent = `Passo ${index + 1}`;
+                passo.dataset.step = index + 1;
+            });
+            contadorPassos = passos.length;
         }
 
         // ========== INICIALIZAÇÃO ==========
         document.addEventListener('DOMContentLoaded', function() {
             preencherCamposAutomaticos();
-            toggleClientes();
-            togglePendencias();
-            toggleErros();
-            // Esconde campos condicionais inicialmente
-            document.getElementById('quaisClientesGroup').style.display = 'none';
-            document.getElementById('pendenciasGroup').style.display = 'none';
-            document.getElementById('descricaoErros').style.display = 'none';
         });
     </script>
 </body>
